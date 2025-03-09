@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dynamic Course Page</title>
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="MP.css" />
+  <script src="MP.js" defer></script>
+
+</head>
+<body>
+  <!-- Taskbar at the very top -->
+  <nav class="taskbar">
+    <div class="taskbar-left">
+      <!-- Home button using a house image -->
+      <a href="index.html" class="home-btn">
+        <i class='bx bxs-home'></i>
+      </a>
+    </div>
+    <div class="taskbar-right">
+      <div class="profile-container">
+        <!-- Profile button; clicking it toggles the dropdown -->
+        <button id="profile-btn" class="profile-btn"></button>
+        <i class='bx bxs-user'></i>
+        <div id="profile-dropdown" class="profile-dropdown">
+          <!-- This logout button will appear in the dropdown -->
+          <button id="logout-btn" class="logout-btn">Logout</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <header>
+      <h1>Course Finder</h1>
+      <form id="search-form" class="search-form">
+        <input type="text" id="course-input" placeholder="Search for a course..." />
+        <button type="submit">Search</button>
+      </form>
+    </header>
+    <main id="course-content">
+      <!-- Default heading for course material -->
+      <h2 class="course-heading">Course Material:</h2>
+      <!-- Course content will be dynamically injected here -->
+    </main>
+  </div>
+  <button class="upload-btn" id="upload-btn">Upload Document</button>
+
+  <script>
+    
+
+   
