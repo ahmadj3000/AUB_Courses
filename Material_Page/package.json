@@ -1,0 +1,24 @@
+{
+  "name": "aub_courses_project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ahmadj3000/AUB_Courses.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ahmadj3000/AUB_Courses/issues"
+  },
+  "homepage": "https://github.com/ahmadj3000/AUB_Courses#readme",
+  "keywords": [],
+  "description": "",
+  "dependencies": {
+    "express": "^4.21.2",
+    "multer": "^1.4.5-lts.1"
+  }
+}
