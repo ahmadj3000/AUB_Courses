@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Comments Section</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <div class="comments-container">
+        <h1>Course:Cmps271 Software Engineering</h1>
+        
+        <ul id="comments-list" class="comments-list">
+            <li class="comment-item">
+                <div class="comment-avatar"><img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="User Avatar"></div>
+                <div class="comment-content">
+                    <div class="comment-head">Mohammad Kobeissi</div>
+                    This course is amazing!
+                </div>
+            </li>
+            <!-- More comments can be added here -->
+        </ul>
+
+        <div class="comment-form-container">
+            <form id="comment-form" class="comment-form">
+                <textarea id="comment-input" class="comment-input" placeholder="Add a comment..." required></textarea>
+                <button type="submit" class="submit-btn">Post Comment</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="comments.js"></script>
+</body>
+</html>

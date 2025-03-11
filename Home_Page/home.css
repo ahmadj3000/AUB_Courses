@@ -1,14 +1,14 @@
 body {
     font-family: Arial, sans-serif;
     text-align: center;
-    background-color: white;
-    color: #003366; /* Dark Blue */
+    background: linear-gradient(to right, #6a11cb, #2575fc); /* Applied gradient background */
+    color: #ffffff; /* Updated text color for better visibility */
     margin: 0;
     padding: 0;
 }
 
 nav {
-    background-color: #003366;
+    background-color: #5729CE; /* Consider adjusting if you want gradient here as well */
     padding: 15px;
     text-align: left;
     display: flex;
@@ -18,8 +18,8 @@ nav {
 
 .dropdown-btn {
     background-color: white;
-    color: #003366;
-    border: 2px solid #003366;
+    color: #5729CE;
+    border: 2px solid #5729CE;
     cursor: pointer;
     padding: 10px 15px;
     font-size: 16px;
@@ -30,7 +30,7 @@ nav {
     display: none;
     position: absolute;
     background: white;
-    border: 1px solid #003366;
+    border: 1px solid #5729CE;
     min-width: 160px;
     box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
     z-index: 1;
@@ -40,11 +40,11 @@ nav {
     display: block;
     padding: 10px;
     text-decoration: none;
-    color: #003366;
+    color: #5729CE;
 }
 
 .dropdown-content a:hover {
-    background: #e6f0ff; /* Light Blue */
+    background: #e6f0ff; /* Consider adjusting for consistency */
 }
 
 .show {
@@ -54,11 +54,14 @@ nav {
 .container {
     margin-top: 50px;
     padding: 20px;
+    background: linear-gradient(to right, #6a11cb, #2575fc); /* Applied gradient background */
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    color: #ffffff; /* Ensure text is visible on dark background */
 }
 
 h1 {
     font-size: 36px;
-    color: #003366;
 }
 
 p {
@@ -74,7 +77,7 @@ p {
 
 .big-button {
     display: inline-block;
-    background-color: #003366;
+    background-color: #0056b3; /* Consider gradient or darker shade for contrast */
     color: white;
     padding: 15px 30px;
     margin: 10px;
@@ -85,10 +88,9 @@ p {
 }
 
 .big-button:hover {
-    background-color: #0055aa;
+    background: linear-gradient(to right, #003d82, #0056b3); /* Gradient on hover */
 }
 
-/* Profile Button */
 .profile-menu {
     position: relative;
     display: inline-block;
@@ -96,8 +98,8 @@ p {
 
 .profile-btn {
     background-color: white;
-    color: #003366;
-    border: 2px solid #003366;
+    color: #5729CE;
+    border: 2px solid #5729CE;
     cursor: pointer;
     padding: 10px 15px;
     font-size: 16px;
@@ -109,7 +111,7 @@ p {
     position: absolute;
     right: 0;
     background: white;
-    border: 1px solid #003366;
+    border: 1px solid #5729CE;
     min-width: 120px;
     box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
     z-index: 1;
@@ -119,7 +121,7 @@ p {
     display: block;
     padding: 10px;
     text-decoration: none;
-    color: #003366;
+    color: #5729CE;
 }
 
 .profile-dropdown a:hover {
