@@ -1,0 +1,106 @@
+[
+  {
+    "id": 1,
+    "username": "test",
+    "answerText": "test",
+    "likes": 13
+  },
+  {
+    "id": 2,
+    "username": "test",
+    "answerText": "test",
+    "likes": 0
+  },
+  {
+    "id": 3,
+    "username": "test",
+    "answerText": "test",
+    "likes": 0
+  },
+  {
+    "id": 4,
+    "username": "test",
+    "answerText": "test",
+    "likes": 11
+  },
+  {
+    "id": 5,
+    "username": "test",
+    "answerText": "test",
+    "likes": 24,
+    "replies": [
+      {
+        "id": 1,
+        "username": "h",
+        "replyText": "h"
+      },
+      {
+        "id": 1741818298193,
+        "username": "test",
+        "replyText": "test"
+      },
+      {
+        "id": 1741818301818,
+        "username": "test",
+        "replyText": "test"
+      },
+      {
+        "id": 1741818773834,
+        "username": "test",
+        "replyText": "test"
+      },
+      {
+        "id": 1741820392424,
+        "username": "test",
+        "replyText": "test"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "username": "test",
+    "answerText": "test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test",
+    "likes": 1,
+    "replies": [
+      {
+        "id": 1741819952036,
+        "username": "test",
+        "replyText": "test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "username": "test",
+    "category": "test",
+    "answerText": "test",
+    "likes": 3,
+    "replies": [
+      {
+        "username": "test",
+        "replyText": "test"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "username": "Hussein",
+    "category": "CMPS 201",
+    "answerText": "Why is khansa not TA'ing this course?",
+    "likes": 0,
+    "replies": []
+  },
+  {
+    "id": 9,
+    "username": "Hussein",
+    "category": "CMPS 201",
+    "answerText": "Why is khansa not TA'ing this course?",
+    "likes": 11,
+    "replies": [
+      {
+        "username": "Hussein",
+        "replyText": "fuck him"
+      }
+    ]
+  }
+]
