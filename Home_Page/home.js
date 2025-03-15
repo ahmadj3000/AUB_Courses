@@ -2,6 +2,12 @@ document.addEventListener('DOMContentLoaded', function() {
     var dropdownButton = document.querySelector('.dropdown-btn');
     var dropdownContent = document.querySelector('.dropdown-content');
 
+    // If you're using an event listener for navigation
+document.querySelector('.piazza-button').addEventListener('click', function() {
+    window.location.href = 'comments.html';
+  });
+  
+
     // Toggle the dropdown content on click
     dropdownButton.addEventListener('click', function() {
         // Check if dropdown is already displayed, toggle accordingly
