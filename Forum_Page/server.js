@@ -1,87 +1,103 @@
+// ✅ Load Environment Variables
+require("dotenv").config();
 const express = require("express");
-const fs = require("fs");
+const mongoose = require("mongoose");
 const cors = require("cors");
+const bodyParser = require("body-parser");
+
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+const MONGO_URI = process.env.MONGO_URI; // Ensure .env file contains the correct MongoDB URI
 
 app.use(cors());
-app.use(express.json());
+app.use(bodyParser.json());
 
-// Load answers from file
-const loadAnswers = () => {
+// ✅ Connect to MongoDB
+mongoose.connect(MONGO_URI)
+    .then(() => console.log("✅ Connected to MongoDB"))
+    .catch(err => console.error("❌ MongoDB Connection Error:", err));
+
+// ✅ Define Schema & Model for Questions
+const QuestionSchema = new mongoose.Schema({
+    username: { type: String, required: true },
+    category: { type: String, required: true },
+    questionText: { type: String, required: true },
+    likes: { type: Number, default: 0 },
+    replies: [{ username: String, replyText: String, likes: { type: Number, default: 0 } }]
+}, { collection: "questions", timestamps: true });
+
+const Question = mongoose.model("Question", QuestionSchema);
+
+// ✅ API: Get All Questions
+app.get("/questions", async (req, res) => {
     try {
-        return JSON.parse(fs.readFileSync("data.json", "utf8"));
-    } catch (err) {
-        return [];
+        const questions = await Question.find().sort({ createdAt: -1 });
+        res.json(questions);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
-};
-
-// Save answers to file
-const saveAnswers = (answers) => {
-    fs.writeFileSync("data.json", JSON.stringify(answers, null, 2));
-};
-
-// ✅ Get all answers
-app.get("/answers", (req, res) => {
-    res.json(loadAnswers());
 });
 
-// ✅ Post a new answer (Now Includes Category)
-app.post("/answers", (req, res) => {
-    const { username, category, answerText } = req.body;
+// ✅ API: Post a New Question
+app.post("/questions", async (req, res) => {
+    try {
+        console.log("🔍 Received Question Data:", req.body);  // ✅ Debugging Log
 
-    if (!username || !category || !answerText) {
-        return res.status(400).json({ error: "Username, category, and answer text are required" });
+        const { username, category, questionText } = req.body;
+        if (!username || !category || !questionText) {
+            console.log("❌ Missing Fields in Request"); // ✅ Debugging Log
+            return res.status(400).json({ error: "All fields are required" });
+        }
+
+        const newQuestion = new Question({ username, category, questionText });
+        await newQuestion.save();
+
+        console.log("✅ Question saved to MongoDB:", newQuestion);  // ✅ Debugging Log
+        res.status(201).json(newQuestion);
+    } catch (error) {
+        console.error("❌ Error saving question to MongoDB:", error);
+        res.status(500).json({ error: error.message });
     }
-
-    const answers = loadAnswers();
-    const newAnswer = {
-        id: answers.length + 1,
-        username,
-        category, // ✅ Save category
-        answerText,
-        likes: 0,
-        replies: []
-    };
-
-    answers.push(newAnswer);
-    saveAnswers(answers);
-
-    res.json(newAnswer);
 });
 
-// ✅ Increase likes for an answer
-app.post("/answers/:id/like", (req, res) => {
-    const answers = loadAnswers();
-    const answer = answers.find(a => a.id === parseInt(req.params.id));
 
-    if (!answer) return res.status(404).json({ error: "Answer not found" });
+// ✅ API: Increase Likes for a Question
+app.post("/questions/:id/like", async (req, res) => {
+    try {
+        const question = await Question.findById(req.params.id);
+        if (!question) return res.status(404).json({ error: "Question not found" });
 
-    answer.likes += 1;
-    saveAnswers(answers);
+        question.likes += 1;
+        await question.save();
 
-    res.json(answer);
-});
-
-// ✅ Post a reply to an answer
-app.post("/answers/:id/reply", (req, res) => {
-    const { username, replyText } = req.body;
-
-    if (!username || !replyText) {
-        return res.status(400).json({ error: "Both username and reply text are required" });
+        res.json({ likes: question.likes });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
-
-    const answers = loadAnswers();
-    const answer = answers.find(a => a.id === parseInt(req.params.id));
-
-    if (!answer) return res.status(404).json({ error: "Answer not found" });
-
-    const newReply = { username, replyText };
-    answer.replies.push(newReply);
-    saveAnswers(answers);
-
-    res.json(newReply);
 });
+
+
+// ✅ API: Post a Reply to a Question
+app.post("/questions/:id/reply", async (req, res) => {
+    try {
+        const { username, replyText } = req.body;
+        if (!username || !replyText) {
+            return res.status(400).json({ error: "Both username and reply text are required" });
+        }
+
+        const question = await Question.findById(req.params.id);
+        if (!question) return res.status(404).json({ error: "Question not found" });
+
+        const newReply = { username, replyText, likes: 0 };
+        question.replies.push(newReply);
+        await question.save();
+
+        res.status(201).json(newReply);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 
 // ✅ Start Server
-app.listen(PORT, () => console.log(`✅ Server running on http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

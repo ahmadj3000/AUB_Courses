@@ -207,6 +207,8 @@ body {
 .reply-box strong {
     font-weight: bold;
     color: #007acc;
+    margin-top: 7px;
+    font-size: 15px;
     margin-right: 8px;
     white-space: nowrap; /* Prevents name from wrapping */
 }
@@ -217,7 +219,7 @@ body {
     word-break: break-word;
     text-align: left;
 }
-/* Reply Form Styles */
+/* ✅ Reply Form Styling */
 .reply-form {
     display: flex;
     align-items: center;
@@ -226,11 +228,11 @@ body {
     padding: 15px;
     border-radius: 8px;
     margin-top: 10px;
-    width: 95%;  /* Make sure the form spans the full width */
+    width: 95%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
-/* Name Input */
+/* ✅ Name Input in Reply Form */
 .reply-form input {
     width: 150px;  /* Keep the name input box the same size */
     padding: 10px;
@@ -239,18 +241,19 @@ body {
     font-size: 14px;
 }
 
-/* Reply Box (Expands Fully) */
+/* ✅ Reply Text Box (Expands Fully) */
 .reply-form textarea {
-    flex-grow: 1;  /* Make the reply text area expand */
+    flex-grow: 1;
     padding: 10px;
     border: 1px solid #007acc;
     border-radius: 5px;
     font-size: 14px;
     height: 40px;
+    resize: none;
     margin-left: 10px; /* Adds space between name input and reply box */
 }
 
-/* Fix Post Reply Button */
+/* ✅ Fix Post Reply Button */
 .reply-form button {
     background: linear-gradient(90deg, #007acc, #005fa3);
     color: white;
@@ -265,10 +268,11 @@ body {
     margin-left: 10px; /* Ensures spacing from reply box */
 }
 
-/* Hover Effect */
+/* ✅ Hover Effect */
 .reply-form button:hover {
     transform: scale(1.05);
 }
+
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -279,4 +283,25 @@ body {
     .input-group {
         flex-direction: column;
     }
+}
+
+/* ✅ Reply Button Styling */
+.reply-btn {
+    display: inline-block;
+    background: #e0f2ff; /* Light blue background */
+    color: #007acc;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1px solid #007acc;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+/* ✅ Hover Effect */
+.reply-btn:hover {
+    background: #007acc;
+    color: white;
+    transform: scale(1.05);
 }
