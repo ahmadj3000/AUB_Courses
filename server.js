@@ -5,6 +5,7 @@ const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -13,6 +14,13 @@ const MONGO_URI = process.env.MONGO_URI; // Ensure .env contains the correct Mon
 
 app.use(cors());
 app.use(bodyParser.json());
+
+// Serve static files from page directories
+app.use(express.static(path.join(__dirname, 'Home_Page')));
+app.use('/forum', express.static(path.join(__dirname, 'Forum_Page')));
+app.use('/login', express.static(path.join(__dirname, 'Login_Page')));
+app.use('/materials', express.static(path.join(__dirname, 'Material_Page')));
+app.use('/comments', express.static(path.join(__dirname, 'Comments_page')));
 
 // ✅ Connect to MongoDB
 mongoose.connect(MONGO_URI)
@@ -143,7 +151,25 @@ app.post("/questions/:id/reply", async (req, res) => {
 
 // ✅ Define Homepage Route
 app.get("/", (req, res) => {
-    res.send("Welcome to the AUB Courses Website! 🎓");
+    res.sendFile(path.join(__dirname, 'Home_Page', 'index.html'));
+});
+
+// Catch-all route to handle client-side routing
+app.get('*', (req, res) => {
+    // Extract the first part of the path
+    const firstPathSegment = req.path.split('/')[1];
+    
+    if (firstPathSegment === 'forum') {
+        res.sendFile(path.join(__dirname, 'Forum_Page', 'index.html'));
+    } else if (firstPathSegment === 'login') {
+        res.sendFile(path.join(__dirname, 'Login_Page', 'index.html'));
+    } else if (firstPathSegment === 'materials') {
+        res.sendFile(path.join(__dirname, 'Material_Page', 'index.html'));
+    } else if (firstPathSegment === 'comments') {
+        res.sendFile(path.join(__dirname, 'Comments_page', 'index.html'));
+    } else {
+        res.sendFile(path.join(__dirname, 'Home_Page', 'index.html'));
+    }
 });
 
 // ✅ Start Server
