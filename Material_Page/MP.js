@@ -1,89 +1,162 @@
-// 1. With documents:
-/*let allDocs = [
-  { title: "Document 1", image: 'Empty_Document.png' },
-  { title: "Document 2", image: 'Empty_Document.png' },
-  { title: "Document 3", image: 'Empty_Document.png' },
-  { title: "Document 4", image: 'Empty_Document.png' },
-  { title: "Document 5", image: 'Empty_Document.png' },
-  { title: "Document 6", image: 'Empty_Document.png' },
-  { title: "Document 7", image: 'Empty_Document.png' },
-  { title: "Document 8", image: 'Empty_Document.png' },
-  { title: "Document 9", image: 'Empty_Document.png' },
-  { title: "Document 10", image: 'Empty_Document.png' },
-  { title: "Document 11", image: 'Empty_Document.png' },
-  { title: "Document 12", image: 'Empty_Document.png' },
-];*/
-let allDocs = [];
+const express = require('express');
+const cors = require('cors');
+const multer = require('multer');
+const mongoose = require('mongoose');
+const path = require('path');
+const app = express();
 
-// Render function
-function renderDocs() {
-  const grid = document.querySelector('.doc-grid');
-  grid.innerHTML = '';
+app.use(cors());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json()); 
 
-  if (allDocs.length === 0) {
-    grid.innerHTML = `
-      <div class="doc-card placeholder">
-        <div class="doc-image-placeholder"></div>
-        <p>No Documents Yet</p>
-      </div>
-    `;
-  } else {
-    allDocs.forEach(doc => {
-      // Use the document's image property; if you want to show the uploaded file, this should be the file's URL.
-      grid.innerHTML += `
-        <div class="doc-card">
-          <a href="${doc.image}" download="${doc.title}">
-            <img src="${doc.image}" alt="${doc.title}" class="doc-image">
-            <p class="doc-title">${doc.title}</p>
-          </a>
-        </div>
-      `;
-    });
+// Connect to MongoDB (Update with your connection string)
+
+// Debugging: Log when trying to connect
+console.log("🟡 Attempting to connect to MongoDB...");
+
+
+// Debugging: Log when trying to connect
+console.log("🟡 Attempting to connect to MongoDB...");
+
+mongoose.connect('mongodb://localhost:27017/coursesDB', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 10000, // Increase timeout to 10 seconds
+  connectTimeoutMS: 10000
+}).then(() => {
+  console.log(" Successfully connected to MongoDB!");
+}).catch(err => {
+  console.error(" Mongoose Connection Error:", err);
+  process.exit(1); // Stop server if MongoDB fails
+});
+
+// Ensure queries only run after connection is established
+mongoose.connection.on('connected', async () => {
+  console.log(" Mongoose is now connected. Running queries...");
+  await initializeCourses(); // Ensures courses exist
+});
+
+
+
+// Define Schema for Courses and Documents
+const documentSchema = new mongoose.Schema({
+  title: String,
+  image: String, // Store file path
+  uploadedAt: { type: Date, default: Date.now }
+});
+
+const courseSchema = new mongoose.Schema({
+  name: String,
+  documents: [documentSchema] // Array of documents
+});
+
+// Create a Course model
+const Course = mongoose.model('Course', courseSchema);
+
+// Setup storage for uploaded files
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname);
+  }
+});
+const upload = multer({ storage: storage });
+
+// Create default courses if they don't exist
+async function initializeCourses() {
+  if (mongoose.connection.readyState !== 1) {
+    console.log("⏳ Waiting for MongoDB to connect before querying...");
+    return;
+  }
+
+  const defaultCourses = ["Phys 200", "Math 200", "Chem 200", "Engl 200", "Cmps 200"];
+
+  for (const courseName of defaultCourses) {
+    const existingCourse = await Course.findOne({ name: courseName });
+
+    if (!existingCourse) {
+      await new Course({ name: courseName, documents: [] }).save();
+      console.log(`✅ Created course: ${courseName}`);
+    } else {
+      console.log(`⚡ Course already exists: ${courseName}`);
+    }
   }
 }
+initializeCourses();
 
-document.addEventListener('DOMContentLoaded', () => {
-  // Ensure a grid container exists in the course content area
-  const courseContent = document.getElementById('course-content');
-  let grid = document.querySelector('.doc-grid');
-  if (!grid) {
-    grid = document.createElement('div');
-    grid.className = 'doc-grid';
-    courseContent.appendChild(grid);
+// Upload file and store in MongoDB
+app.post('/upload', upload.single('file'), async (req, res) => {
+  const { courseId } = req.body;
+  const file = req.file;
+
+  if (!file) {
+    return res.status(400).json({ message: "No file uploaded." });
   }
-  renderDocs();
 
-  // Attach the upload button functionality
-  const uploadBtn = document.getElementById('upload-btn');
-  uploadBtn.addEventListener('click', () => {
-    console.log("Upload button clicked");
-    // Create a hidden file input
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.style.display = 'none';
+  const course = await Course.findOne({ name: courseId });
+  if (!course) {
+    return res.status(404).json({ message: "Course not found" });
+  }
 
-    // When a file is selected, add it to the list
-    fileInput.addEventListener('change', (event) => {
-      const file = event.target.files[0];
-      console.log("File selected:", file);
-      if (file) {
-        // Create a temporary URL for the file so it can be displayed
-        const fileURL = URL.createObjectURL(file);
-        console.log("File URL:", fileURL);
-        // Add the new document to the allDocs array
-        allDocs.push({
-          title: file.name,
-          image: fileURL
-        });
-        // Re-render the document grid to include the new file
-        renderDocs();
-      }
-    });
+  const newDoc = {
+    title: file.originalname,
+    image: `/uploads/${file.filename}`
+  };
 
-    // Append the file input to the body and open the file dialog
-    document.body.appendChild(fileInput);
-    fileInput.click();
-    // Optionally remove the file input after triggering the click
-    // fileInput.remove();
-  });
+  course.documents.push(newDoc);
+  await course.save();
+
+  res.json({ message: "File uploaded successfully", document: newDoc });
 });
+
+// Fetch documents for a specific course
+app.get("/documents/:courseId", async (req, res) => {
+  const decodedCourseId = decodeURIComponent(req.params.courseId).trim();
+
+  console.log(`🔍 Searching for course: ${decodedCourseId}`);
+
+  // Find course with case-insensitive search
+  const course = await Course.findOne({ 
+      name: { $regex: `^${decodedCourseId}$`, $options: "i" } 
+  });
+
+  if (!course) {
+      console.log(`❌ Course not found: '${decodedCourseId}'`);
+      return res.status(404).json({ message: "Course not found" });
+  }
+
+  console.log(`✅ Found course: '${course.name}', returning documents...`);
+  res.json(course.documents);
+});
+
+
+
+
+// Serve static files including uploaded documents
+app.use(express.static(path.join(__dirname)));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+// API to search for courses
+app.get('/courses', async (req, res) => {
+  const searchQuery = req.query.search;
+
+  try {
+      let courses;
+      if (searchQuery) {
+          courses = await Course.find({ name: { $regex: searchQuery, $options: 'i' } });
+      } else {
+          courses = await Course.find({});
+      }
+
+      res.json(courses);
+  } catch (err) {
+      console.error(" Error fetching courses:", err);
+      res.status(500).json({ error: 'Internal error' });
+  }
+});
+
