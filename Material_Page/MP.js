@@ -1,162 +1,129 @@
-const express = require('express');
-const cors = require('cors');
-const multer = require('multer');
-const mongoose = require('mongoose');
-const path = require('path');
-const app = express();
+let selectedCourse = ""; // Declare a global variable
 
-app.use(cors());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json()); 
+// Function to fetch and display documents for a course
+async function fetchDocuments(courseName) {
+    try {
+        console.log(`📡 Fetching documents for: ${courseName}`);
+        const response = await fetch(`http://localhost:3000/documents/${encodeURIComponent(courseName)}`);
+        
+        if (!response.ok) {
+            throw new Error(`Server responded with ${response.status}`);
+        }
+        
+        const documents = await response.json();
+        console.log("📄 Server Response:", documents);
 
-// Connect to MongoDB (Update with your connection string)
+        const grid = document.querySelector('.doc-grid');
+        grid.innerHTML = ''; // Clear previous results
 
-// Debugging: Log when trying to connect
-console.log("🟡 Attempting to connect to MongoDB...");
-
-
-// Debugging: Log when trying to connect
-console.log("🟡 Attempting to connect to MongoDB...");
-
-mongoose.connect('mongodb://localhost:27017/coursesDB', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  serverSelectionTimeoutMS: 10000, // Increase timeout to 10 seconds
-  connectTimeoutMS: 10000
-}).then(() => {
-  console.log(" Successfully connected to MongoDB!");
-}).catch(err => {
-  console.error(" Mongoose Connection Error:", err);
-  process.exit(1); // Stop server if MongoDB fails
-});
-
-// Ensure queries only run after connection is established
-mongoose.connection.on('connected', async () => {
-  console.log(" Mongoose is now connected. Running queries...");
-  await initializeCourses(); // Ensures courses exist
-});
-
-
-
-// Define Schema for Courses and Documents
-const documentSchema = new mongoose.Schema({
-  title: String,
-  image: String, // Store file path
-  uploadedAt: { type: Date, default: Date.now }
-});
-
-const courseSchema = new mongoose.Schema({
-  name: String,
-  documents: [documentSchema] // Array of documents
-});
-
-// Create a Course model
-const Course = mongoose.model('Course', courseSchema);
-
-// Setup storage for uploaded files
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/');
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + '-' + file.originalname);
-  }
-});
-const upload = multer({ storage: storage });
-
-// Create default courses if they don't exist
-async function initializeCourses() {
-  if (mongoose.connection.readyState !== 1) {
-    console.log("⏳ Waiting for MongoDB to connect before querying...");
-    return;
-  }
-
-  const defaultCourses = ["Phys 200", "Math 200", "Chem 200", "Engl 200", "Cmps 200"];
-
-  for (const courseName of defaultCourses) {
-    const existingCourse = await Course.findOne({ name: courseName });
-
-    if (!existingCourse) {
-      await new Course({ name: courseName, documents: [] }).save();
-      console.log(`✅ Created course: ${courseName}`);
-    } else {
-      console.log(`⚡ Course already exists: ${courseName}`);
+        if (!documents || documents.length === 0) {
+            grid.innerHTML = `
+                <div class="doc-card placeholder">
+                    <div class="doc-image-placeholder"></div>
+                    <p>No Documents Yet</p>
+                </div>
+            `;
+        } else {
+            documents.forEach(doc => {
+                grid.innerHTML += `
+                    <div class="doc-card">
+                        <a href="${doc.image}" download>
+                            <img src="${doc.image}" alt="${doc.title}" class="doc-image">
+                            <p class="doc-title">${doc.title}</p>
+                        </a>
+                    </div>
+                `;
+            });
+        }
+    } catch (error) {
+        console.error("❌ Error fetching documents:", error);
+        alert("Failed to load documents.");
     }
-  }
 }
-initializeCourses();
 
-// Upload file and store in MongoDB
-app.post('/upload', upload.single('file'), async (req, res) => {
-  const { courseId } = req.body;
-  const file = req.file;
+// Search bar functionality
+document.getElementById('search-form').addEventListener('submit', async function (e) {
+    e.preventDefault(); // Prevent page reload
 
-  if (!file) {
-    return res.status(400).json({ message: "No file uploaded." });
-  }
+    const searchQuery = document.getElementById('course-input').value.trim();
+    if (!searchQuery) {
+        alert("Please enter a course name.");
+        return;
+    }
 
-  const course = await Course.findOne({ name: courseId });
-  if (!course) {
-    return res.status(404).json({ message: "Course not found" });
-  }
+    try {
+        console.log("🔍 Searching for:", searchQuery);
+        const response = await fetch(`http://localhost:3000/courses?search=${encodeURIComponent(searchQuery)}`);
+        console.log("📡 Fetch Response:", response.status);
 
-  const newDoc = {
-    title: file.originalname,
-    image: `/uploads/${file.filename}`
-  };
+        const courses = await response.json();
+        console.log("📄 Server Response:", courses);
 
-  course.documents.push(newDoc);
-  await course.save();
+        if (courses.length === 0) {
+            document.getElementById('course-content').innerHTML = `<p>No matching courses found</p>`;
+            return;
+        }
 
-  res.json({ message: "File uploaded successfully", document: newDoc });
+        selectedCourse = courses[0].name; // Save the selected course globally
+        console.log("✅ Found Course:", selectedCourse);
+
+        document.getElementById('course-content').innerHTML = `<h2>${selectedCourse} Materials:</h2><div class="doc-grid"></div>`;
+
+        fetchDocuments(selectedCourse);
+    } catch (error) {
+        console.error("❌ Error searching for courses:", error);
+        alert("Search failed.");
+    }
 });
 
-// Fetch documents for a specific course
-app.get("/documents/:courseId", async (req, res) => {
-  const decodedCourseId = decodeURIComponent(req.params.courseId).trim();
+// Upload button functionality
+document.getElementById('upload-btn').addEventListener('click', () => {
+    console.log("Upload button clicked");
 
-  console.log(`🔍 Searching for course: ${decodedCourseId}`);
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.style.display = 'none';
 
-  // Find course with case-insensitive search
-  const course = await Course.findOne({ 
-      name: { $regex: `^${decodedCourseId}$`, $options: "i" } 
-  });
+    fileInput.addEventListener('change', async (event) => {
+        const file = event.target.files[0];
 
-  if (!course) {
-      console.log(`❌ Course not found: '${decodedCourseId}'`);
-      return res.status(404).json({ message: "Course not found" });
-  }
+        if (!file) {
+            alert("No file selected.");
+            return;
+        }
 
-  console.log(`✅ Found course: '${course.name}', returning documents...`);
-  res.json(course.documents);
+        if (!selectedCourse) {
+            alert("Please search for a course first before uploading.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("courseId", selectedCourse);
+        formData.append("file", file);
+
+        try {
+            console.log("Uploading file...");
+
+            const response = await fetch('http://localhost:3000/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            console.log(result);
+
+            if (response.ok) {
+                alert("File uploaded successfully!");
+                fetchDocuments(selectedCourse); // Refresh document list
+            } else {
+                alert("Error: " + result.message);
+            }
+        } catch (error) {
+            console.error("Upload failed:", error);
+            alert("Upload failed.");
+        }
+    });
+
+    document.body.appendChild(fileInput);
+    fileInput.click();
 });
-
-
-
-
-// Serve static files including uploaded documents
-app.use(express.static(path.join(__dirname)));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-// API to search for courses
-app.get('/courses', async (req, res) => {
-  const searchQuery = req.query.search;
-
-  try {
-      let courses;
-      if (searchQuery) {
-          courses = await Course.find({ name: { $regex: searchQuery, $options: 'i' } });
-      } else {
-          courses = await Course.find({});
-      }
-
-      res.json(courses);
-  } catch (err) {
-      console.error(" Error fetching courses:", err);
-      res.status(500).json({ error: 'Internal error' });
-  }
-});
-
