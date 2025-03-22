@@ -211,7 +211,7 @@ app.post("/questions/:id/reply", async (req, res) => {
 
 // ✅ Define Homepage Route
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, 'Login_Page', 'index.html'));
+    res.sendFile(path.join(__dirname, 'Home_Page', 'home.html'));
   });
 
 // Catch-all route to handle client-side routing
