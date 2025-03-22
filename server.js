@@ -29,11 +29,11 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Serve static files from page directories
-app.use(express.static(path.join(__dirname, 'Home_Page')));
+app.use('Home_Page', express.static(path.join(__dirname, 'Home_Page')));
 app.use('/Forum_Page', express.static(path.join(__dirname, 'Forum_Page')));
 app.use('/Login_Page', express.static(path.join(__dirname, 'Login_Page')));
 app.use('/Material_Page', express.static(path.join(__dirname, 'Material_Page')));
-app.use('/Comment_Page', express.static(path.join(__dirname, 'Comments_page')));
+app.use('/Comments_Page', express.static(path.join(__dirname, 'Comments_page')));
 
 // ✅ Connect to MongoDB
 mongoose.connect(MONGO_URI)
