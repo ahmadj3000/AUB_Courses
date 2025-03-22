@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
 async function loadQuestions() {
     try {
         console.log("📌 Fetching questions from MongoDB...");
-        const response = await fetch("http://localhost:3000/questions");
+        const response = await fetch("/questions");
 
         if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
@@ -46,7 +46,7 @@ async function postQuestion() {
     console.log("📤 Sending Question Data:", postData);  // ✅ Debugging Log
 
     try {
-        const response = await fetch("http://localhost:3000/questions", {
+        const response = await fetch("/questions", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(postData)
@@ -142,7 +142,7 @@ async function postReply(questionId) {
     console.log(`📤 Posting reply to question ID ${questionId}:`, { username, replyText });
 
     try {
-        const response = await fetch(`http://localhost:3000/questions/${questionId}/reply`, {
+        const response = await fetch(`/questions/${questionId}/reply`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username, replyText })
@@ -190,7 +190,7 @@ function addReplyToUI(questionId, reply) {
 // ✅ Function to Increase Like Count
 async function likeQuestion(questionId, button) {
     try {
-        const response = await fetch(`http://localhost:3000/questions/${questionId}/like`, {
+        const response = await fetch(`/questions/${questionId}/like`, {
             method: "POST"
         });
 
