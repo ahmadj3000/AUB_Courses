@@ -6,6 +6,19 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
 const path = require('path');
+const multer = require("multer");
+
+// Setup file storage
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, "uploads/"),
+  filename: (req, file, cb) => {
+    const uniqueName = Date.now() + "-" + file.originalname;
+    cb(null, uniqueName);
+  },
+});
+
+const upload = multer({ storage });
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -19,7 +32,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'Home_Page')));
 app.use('/forum', express.static(path.join(__dirname, 'Forum_Page')));
 app.use('/login', express.static(path.join(__dirname, 'Login_Page')));
-app.use('/materials', express.static(path.join(__dirname, 'Material_Page')));
+app.use('/Material_Page', express.static(path.join(__dirname, 'Material_Page')));
 app.use('/comments', express.static(path.join(__dirname, 'Comments_page')));
 
 // ✅ Connect to MongoDB
@@ -69,6 +82,53 @@ app.post('/login', async (req, res) => {
     }
 });
 
+//Course Schema
+const courseSchema = new mongoose.Schema({
+    code: { type: String, required: true, unique: true },
+    title: { type: String },
+    previouses: [{ filename: String, path: String }],
+    materials: [{ filename: String, path: String }]
+  });
+  
+  const Course = mongoose.model("Course", courseSchema);
+
+app.use(cors());
+app.use(express.json());
+const materialRoutes = require("./Routes/materialRoutes");
+app.use("/uploads", express.static(path.join(__dirname, "uploads"))); // serve uploaded filess
+app.use("/api/materials", materialRoutes);
+app.use("/api/materials", require("./Routes/materialRoutes"));
+
+
+app.post("/api/courses", async (req, res) => {
+    try {
+      const { code, title } = req.body;
+  
+      if (!code) return res.status(400).json({ error: "Course code is required" });
+  
+      const course = new Course({ code, title });
+      await course.save();
+  
+      res.status(201).json(course);
+    } catch (err) {
+      if (err.code === 11000) {
+        res.status(400).json({ error: "Course already exists" });
+      } else {
+        console.error(err);
+        res.status(500).json({ error: "Server error" });
+      }
+    }
+  });
+
+  app.get("/api/courses", async (req, res) => {
+    try {
+      const courses = await Course.find();
+      res.json(courses);
+    } catch (err) {
+      res.status(500).json({ error: "Failed to fetch courses" });
+    }
+  });
+  
 
 // ✅ Define Schema & Model for Questions (Forum)
 const QuestionSchema = new mongoose.Schema({
@@ -151,7 +211,7 @@ app.post("/questions/:id/reply", async (req, res) => {
 
 // ✅ Define Homepage Route
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, 'Home_Page', 'index.html'));
+    res.sendFile(path.join(__dirname, 'Home_Page', 'home.html'));
 });
 
 // Catch-all route to handle client-side routing
@@ -166,9 +226,9 @@ app.get('*', (req, res) => {
     } else if (firstPathSegment === 'materials') {
         res.sendFile(path.join(__dirname, 'Material_Page', 'index.html'));
     } else if (firstPathSegment === 'comments') {
-        res.sendFile(path.join(__dirname, 'Comments_page', 'index.html'));
+        res.sendFile(path.join(__dirname, 'Comments_page', 'comments.html'));
     } else {
-        res.sendFile(path.join(__dirname, 'Home_Page', 'index.html'));
+        res.sendFile(path.join(__dirname, 'Home_Page', 'home.html'));
     }
 });
 

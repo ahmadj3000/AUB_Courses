@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Course Materials</title>
+  <link rel="stylesheet" href="basic.css" />
+  <link rel="stylesheet" href="styles.css" /> <!-- In case you still use styles.css -->
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round" class="book-icon">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+        </svg>
+        <h1>Course Materials</h1>
+      </div>
+    </header>
+
+    <main>
+      <!-- Upload Section -->
+      <section class="upload-section">
+        <h2>Upload Material</h2>
+        <p>Share course materials, previous exams, or helpful resources</p>
+
+        <form id="materialForm" class="upload-form">
+          <div class="form-group">
+            <label for="title">Title</label>
+            <input id="title" type="text" placeholder="e.g. Introduction to Programming" />
+          </div>
+
+          <div class="form-group">
+            <label for="course">Course</label>
+            <input id="course" type="text" placeholder="e.g. CMPS 201" />
+          </div>
+
+          <div class="form-group">
+            <label for="type">Type</label>
+            <select id="type">
+              <option value="Materials">Course Material</option>
+              <option value="Previouses">Previous Exam</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" placeholder="Brief description..."></textarea>
+          </div>
+
+          <div class="form-group file-input">
+            <label for="fileInput" class="btn-download choose-file-label">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                style="margin-right: 6px;">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+              <span>Choose File</span>
+            </label>
+            <input type="file" id="fileInput" name="file" hidden />
+            <span class="file-name">No file chosen</span>
+          </div>
+          
+
+          <button type="submit" class="btn-submit">Upload Material</button>
+        </form>
+      </section>
+
+      <!-- Courses Section -->
+      <section class="materials-section">
+        <h2>Browse Materials</h2>
+        <p>Search and access course materials shared by instructors and students</p>
+
+        <div class="search-container">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" class="search-icon">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input id="searchInput" type="text" placeholder="Search by course code..." class="search-input" />
+        </div>
+
+        <div id="courseList" class="materials-list">
+          <!-- Course cards inserted by JS -->
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 AUB Courses Platform</p>
+    </footer>
+  </div>
+</body>
+</html>
