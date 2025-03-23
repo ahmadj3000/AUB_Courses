@@ -69,7 +69,9 @@ app.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
     try {
-        const user = await User.findOne({ username });
+        const user = await User.findOne({
+            $or: [{ username }, { email: username }]
+          });
         if (!user) return res.status(400).json({ message: "❌ Invalid username or password" });
 
         const isMatch = await bcrypt.compare(password, user.password);
@@ -222,7 +224,7 @@ app.get('*', (req, res) => {
     if (firstPathSegment === 'forum') {
         res.sendFile(path.join(__dirname, 'Forum_Page', 'index.html'));
     } else if (firstPathSegment === 'login') {
-        res.sendFile(path.join(__dirname, 'Login_Page', 'index.html'));
+        res.sendFile(path.join(__dirname, 'Login_Page', 'login.html'));
     } else if (firstPathSegment === 'materials') {
         res.sendFile(path.join(__dirname, 'Material_Page', 'index.html'));
     } else if (firstPathSegment === 'comments') {
