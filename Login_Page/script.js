@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const password = document.getElementById("loginPassword").value;
   
       try {
-        const response = await fetch("http://localhost:3000/login", {
+        const response = await fetch("/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ username: email, password }),
@@ -66,4 +66,3 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
-  app.use('/Home_Page', express.static(path.join(__dirname, 'Home_Page')));
