@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const password = document.getElementById("loginPassword").value;
   
       try {
-        const response = await fetch("https://your-app-name.onrender.com/login", {
+        const response = await fetch("https://aub-courses-qhnx.onrender.com/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ username: email, password }),
@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
   
       try {
-        const response = await fetch("https://your-app-name.onrender.com/register", {
+        const response = await fetch("https://aub-courses-qhnx.onrender.com/register", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ username, email, password }),
