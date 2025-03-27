@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const password = document.getElementById("loginPassword").value;
   
       try {
-        const response = await fetch("/login", {
+        const response = await fetch("https://your-app-name.onrender.com/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ username: email, password }),
@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
   
       try {
-        const response = await fetch("http://localhost:3000/register", {
+        const response = await fetch("https://your-app-name.onrender.com/register", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ username, email, password }),
