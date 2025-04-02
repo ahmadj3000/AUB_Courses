@@ -30,17 +30,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ✅ PASSWORD VISIBILITY TOGGLE
   document.querySelectorAll(".password-toggle").forEach(button => {
-      button.addEventListener("click", () => {
-          const passwordField = button.previousElementSibling;
-          if (passwordField.type === "password") {
-              passwordField.type = "text";
-              button.innerHTML = '<i class="fas fa-eye-slash"></i>'; // Change icon
-          } else {
-              passwordField.type = "password";
-              button.innerHTML = '<i class="fas fa-eye"></i>'; // Restore icon
-          }
-      });
-  });
+    button.addEventListener("click", () => {
+        const passwordField = button.previousElementSibling; // Selects the password input
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+            button.innerHTML = '<i class="fas fa-eye-slash"></i>'; // Change icon
+        } else {
+            passwordField.type = "password";
+            button.innerHTML = '<i class="fas fa-eye"></i>'; // Restore icon
+        }
+    });
+});
 
   // ✅ REGISTER FUNCTIONALITY
   registerForm.addEventListener("submit", async (e) => {
