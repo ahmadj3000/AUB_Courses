@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -20,10 +22,10 @@
         <input type="email" id="loginEmail" placeholder="name@example.com" required />
         <label>Password</label>
         <div class="password-container">
-            <input type="password" id="loginPassword" placeholder="••••••••" />
-            <button type="button" class="password-toggle">
-              <i class="fas fa-eye"></i>
-            </button>
+          <input type="password" id="loginPassword" placeholder="••••••••" required />
+          <button type="button" class="password-toggle" id="toggleLoginPassword">
+            <i class="fas fa-eye"></i>
+          </button>
         </div>          
         <div class="options">
           <label><input type="checkbox" /> Remember me</label>
@@ -44,16 +46,18 @@
         <label>Password</label>
         <div class="password-container">
           <input type="password" id="registerPassword" required />
-          <button type="button" class="password-toggle">
-              <i class="fas fa-eye"></i>
+          <button type="button" class="password-toggle" id="toggleRegisterPassword">
+            <i class="fas fa-eye"></i>
           </button>
-      </div>
-      
-        <label>Confirm Password</label>
+        </div>
+     
         <div class="password-container">
           <input type="password" id="confirmPassword" required />
-          <span class="icon">👁️</span>
+          <button type="button" class="password-toggle" id="toggleConfirmPassword">
+            <i class="fas fa-eye"></i>
+          </button>
         </div>
+      
         <label class="terms"><input type="checkbox" required /> I agree to the Terms of Service and Privacy Policy</label>
         <button type="submit">Create account</button>
         <p class="switch">Already have an account? <a href="#" id="showLogin">Login</a></p>
@@ -62,22 +66,7 @@
 
     <footer>© 2025 AUB Reviews. All rights reserved.</footer>
   </div>
-  <script>
-    const showRegister = document.getElementById("showRegister");
-    const showLogin = document.getElementById("showLogin");
-    const loginForm = document.getElementById("loginForm");
-    const registerForm = document.getElementById("registerForm");
 
-    showRegister.addEventListener("click", () => {
-      loginForm.classList.remove("active");
-      registerForm.classList.add("active");
-    });
-
-    showLogin.addEventListener("click", () => {
-      registerForm.classList.remove("active");
-      loginForm.classList.add("active");
-    });
-  </script>
+  <script src="script.js" defer></script>
 </body>
 </html>
-<script src="/Login_Page/script.js" defer></script>
