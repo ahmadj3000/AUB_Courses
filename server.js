@@ -216,11 +216,12 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, 'Login_Page', 'login.html'));
   });
 
-// Catch-all route to handle client-side routing
-app.get('*', (req, res) => {
-    // Extract the first part of the path
+app.get('*', (req, res, next) => {
+    if (path.extname(req.path)) {
+        return next();
+    }
+
     const firstPathSegment = req.path.split('/')[1];
-    
     if (firstPathSegment === 'forum') {
         res.sendFile(path.join(__dirname, 'Forum_Page', 'index.html'));
     } else if (firstPathSegment === 'login') {
@@ -233,6 +234,7 @@ app.get('*', (req, res) => {
         res.sendFile(path.join(__dirname, 'Home_Page', 'home.html'));
     }
 });
+
 
 // ✅ Start Server
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
