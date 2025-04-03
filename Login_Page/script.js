@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (response.ok) {
         alert(data.message || "✅ Account created!");
         document.getElementById("registerForm").reset();
-        showLogin.click(); // Automatically show the login form after registration
+        showLogin.click();
       } else {
         alert(data.message || "❌ Registration failed");
       }
