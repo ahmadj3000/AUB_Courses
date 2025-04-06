@@ -1,135 +1,483 @@
-/* Reset styles */
+
+/* Reset and Base Styles */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-body {
-    font-family: 'Roboto', Arial, sans-serif;
-    background: linear-gradient(to right, #6a11cb, #2575fc);
-    color: #fff;
-    padding: 20px;
-}
-
-nav {
-    background-color: #5729CE; /* Deep blue background */
-    padding: 15px;
-    text-align: left;
+  }
+  
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    line-height: 1.6;
+    color: #f0f0f0;
+    background-color: #1A1F2C;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  .container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  button {
+    cursor: pointer;
+    border: none;
+    outline: none;
+  }
+  
+  /* Header Styles */
+  .header {
+    background-color: rgba(20, 22, 30, 0.95);
+    border-bottom: 1px solid #333;
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .header-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-.dropdown-btn {
-    background-color: white;
-    color: #5729CE;
-    border: 2px solid #5729CE;
-    cursor: pointer;
-    padding: 10px 15px;
-    font-size: 16px;
-    border-radius: 5px;
-    position: relative; /* Ensuring relative positioning for accurate dropdown placement */
-}
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
-    z-index: 1;
-    top: 50px; /* Adjusting top position so first option is visible */
-}
-
-.dropdown-content a {
-    color: #5729CE;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block; /* Ensure full width and block behavior */
-}
-
-.dropdown-content a:hover {
-    background-color: #e6f0ff; /* Light blue background on hover */
-}
-
-.container {
-    margin-top: 50px;
-    padding: 20px;
-    background: linear-gradient(to right, #6a11cb, #2575fc); /* Consistent gradient background */
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    color: #ffffff; /* White text for visibility */
-    text-align: center; /* Centers text and inline-block elements like buttons within the container */
-}
-
-h1 {
-    font-size: 36px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
-.buttons {
-    margin-top: 30px;
+  }
+  
+  .logo {
+    font-size: 2rem;
+    font-weight: bold;
+    letter-spacing: -0.5px;
+  }
+  
+  .logo-aub {
+    color: #f0f0f0;
+  }
+  
+  .logo-reviews {
+    color: #ea384c;
+  }
+  
+  .auth-buttons {
     display: flex;
-    justify-content: center; /* This will center all button elements horizontally within the '.buttons' container */
-    flex-wrap: wrap; /* Allows buttons to wrap onto the next line if space is insufficient */
-}
-
-.big-button {
-    display: inline-block; /* Ensures that buttons can be centered using text-align on the parent */
-    background-color: white; /* Deep blue background */
-    color: #0056b3;
-    padding: 15px 30px;
-    margin: 10px;
-    font-size: 18px;
-    text-decoration: none;
-    border-radius: 8px;
-    transition: 0.3s;
-}
-
-.big-button:hover {
-  background: linear-gradient(to right, #003d82, #0056b3); /* Gradient on hover for a dynamic effect */
-}
-
-
-.profile-menu {
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .login-link {
+    color: #ccc;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  
+  .login-link:hover {
+    color: #fff;
+  }
+  
+  .signup-button {
+    background-color: #ea384c;
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 0.5rem 1.25rem;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+  }
+  
+  .signup-button:hover {
+    background-color: #d12e40;
+  }
+  
+  /* Hero Section Styles */
+  .hero {
+    padding: 4rem 0;
+    background: linear-gradient(to bottom, #1A1F2C, #301a1f);
+    text-align: center;
+  }
+  
+  .hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #fff;
+  }
+  
+  .hero p {
+    font-size: 1.1rem;
+    color: #aaa;
+    margin-bottom: 2rem;
+  }
+  
+  .search-container {
     position: relative;
-    display: inline-block;
-}
-
-.profile-btn {
-    background-color: white;
-    color: #5729CE;
-    border: 2px solid #5729CE;
-    cursor: pointer;
-    padding: 10px 15px;
-    font-size: 16px;
-    border-radius: 5px;
-}
-
-.profile-dropdown {
-    display: none;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .search-input {
+    width: 100%;
+    padding: 0.9rem 4rem 0.9rem 1.2rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #444;
+    background-color: rgba(180, 55, 55, 0.1);
+    color: #fff;
+    outline: none;
+    transition: all 0.2s;
+  }
+  
+  .search-input:focus {
+    border-color: #ea384c;
+    box-shadow: 0 0 0 2px rgba(234, 56, 76, 0.2);
+  }
+  
+  .search-input::placeholder {
+    color: #777;
+  }
+  
+  .search-button {
     position: absolute;
     right: 0;
-    background-color: white;
-    border: 1px solid #5729CE;
-    min-width: 120px;
-    box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
-    z-index: 1;
-}
-
-.profile-dropdown a {
-    display: block;
-    padding: 10px;
-    text-decoration: none;
-    color: #5729CE;
-}
-
-.profile-dropdown a:hover {
-    background: #e6f0ff;
-}
-
-.profile-menu:hover .profile-dropdown {
-    display: block; /* Show dropdown on hover */
-}
+    top: 0;
+    height: 100%;
+    padding: 0 1.2rem;
+    background-color: #ea384c;
+    color: white;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+  }
+  
+  .search-button:hover {
+    background-color: #d12e40;
+  }
+  
+  .search-icon {
+    stroke: currentColor;
+  }
+  
+  /* Courses Section Styles */
+  .courses {
+    padding: 3rem 0;
+    min-height: 60vh;
+  }
+  
+  .courses-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+  }
+  
+  .courses h2 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .course-count {
+    color: #888;
+    font-size: 0.95rem;
+  }
+  
+  .filter-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.6rem 1rem;
+    color: #ccc;
+    background-color: transparent;
+    border: 1px solid #444;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+  }
+  
+  .filter-button:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+  
+  .filters {
+    background-color: rgba(180, 55, 55, 0.1);
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 1.2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .filters h3 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    font-weight: 500;
+  }
+  
+  .filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .dept-button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+    border-radius: 4px;
+    background-color: transparent;
+    color: #ddd;
+    border: 1px solid #444;
+    transition: all 0.2s;
+  }
+  
+  .dept-button:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+  
+  .dept-button.active {
+    background-color: #ea384c;
+    color: white;
+    border-color: #ea384c;
+  }
+  
+  .course-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .course-card {
+    background-color: rgba(180, 55, 55, 0.1);
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+  
+  .card-header h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+  
+  .rating {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 0.3rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+  
+  .course-name {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: #eee;
+  }
+  
+  .department {
+    font-size: 0.85rem;
+    color: #999;
+    margin-bottom: 1rem;
+  }
+  
+  .description {
+    font-size: 0.9rem;
+    color: #bbb;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+  
+  .professors {
+    font-size: 0.85rem;
+    color: #999;
+    margin-bottom: 1.5rem;
+  }
+  
+  .card-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: auto;
+  }
+  
+  .card-button {
+    padding: 0.6rem;
+    font-size: 0.85rem;
+    text-align: center;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+  }
+  
+  .material-button {
+    background-color: #444;
+    color: white;
+  }
+  
+  .material-button:hover {
+    background-color: #555;
+  }
+  
+  .review-button {
+    background-color: #ea384c;
+    color: white;
+  }
+  
+  .review-button:hover {
+    background-color: #d12e40;
+  }
+  
+  .forum-button {
+    background-color: #333;
+    color: white;
+  }
+  
+  .forum-button:hover {
+    background-color: #444;
+  }
+  
+  .no-courses {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 0;
+    color: #777;
+  }
+  
+  .no-courses svg {
+    margin-bottom: 1.5rem;
+    stroke: #555;
+  }
+  
+  .no-courses h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+    color: #aaa;
+  }
+  
+  .no-courses p {
+    font-size: 0.9rem;
+  }
+  
+  /* Footer Styles */
+  .footer {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-top: 1px solid #333;
+    padding: 3rem 0 1.5rem;
+  }
+  
+  .footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+  
+  .footer .logo {
+    font-size: 1.5rem;
+  }
+  
+  .footer-links {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .footer-link {
+    font-size: 0.85rem;
+    color: #888;
+    transition: color 0.2s;
+  }
+  
+  .footer-link:hover {
+    color: #fff;
+  }
+  
+  .separator {
+    border: none;
+    height: 1px;
+    background-color: #333;
+    margin: 1.5rem 0;
+  }
+  
+  .copyright {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #666;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .hero h1 {
+      font-size: 2rem;
+    }
+    
+    .courses-header {
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .filter-buttons {
+      flex-wrap: wrap;
+    }
+    
+    .footer-top {
+      flex-direction: column;
+      gap: 2rem;
+    }
+    
+    .footer-links {
+      flex-direction: column;
+      gap: 1rem;
+      text-align: center;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .header-container {
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .auth-buttons {
+      width: 100%;
+      justify-content: center;
+    }
+    
+    .hero {
+      padding: 2rem 0;
+    }
+    
+    .course-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Course Materials - AUB Reviews</title>
+  <link rel="stylesheet" href="course-materials.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container header-container">
+      <div class="logo">
+        <a href="home.html">
+          <span class="logo-aub">AUB</span>
+          <span class="logo-reviews">REVIEWS</span>
+        </a>
+      </div>
+      <div class="auth-buttons">
+        <a href="#" class="login-link">Log in</a>
+        <button class="signup-button">Sign up</button>
+      </div>
+    </div>
+  </header>
+
+    <!-- Main Content -->
+    <div class="container main-content">
+      <div class="course-header">
+        <div class="breadcrumbs">
+          <a href="home.html">Home</a> / 
+          <span id="breadcrumb-code" class="course-code">Loading...</span>
+        </div>
+        <h1>
+          <span id="course-code" class="course-code">Loading...</span>
+          <span id="course-title"></span>
+        </h1>
+        <div id="course-meta" class="course-meta">
+          Loading course info...
+        </div>
+      </div>
+
+
+    <!-- Course Navigation -->
+    <div class="course-nav">
+      <a id="nav-materials" class="nav-link">Materials</a>
+      <a id="nav-reviews" class="nav-link">Reviews</a>
+      <a id="nav-forum" class="nav-link">Forum</a>
+    </div>
+
+    <script>
+      function getCourseIdFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get("course");
+      }
+    
+      const courseId = getCourseIdFromURL();
+    
+      const navMap = {
+        "nav-materials": "course-materials.html",
+        "nav-reviews": "course-reviews.html",
+        "nav-forum": "course-forum.html"
+      };
+    
+      Object.entries(navMap).forEach(([id, file]) => {
+        const link = document.getElementById(id);
+        if (link) {
+          if (courseId) {
+            link.setAttribute("href", `${file}?course=${courseId}`);
+          } else {
+            link.setAttribute("href", file); // fallback
+          }
+        }
+      });
+
+      // Highlight the current tab based on URL
+      const currentPage = window.location.pathname.split("/").pop();
+
+      if (currentPage.includes("materials")) {
+        document.getElementById("nav-materials")?.classList.add("active");
+      } else if (currentPage.includes("reviews")) {
+        document.getElementById("nav-reviews")?.classList.add("active");
+      } else if (currentPage.includes("forum")) {
+        document.getElementById("nav-forum")?.classList.add("active");
+      }
+
+    </script>
+
+    <!-- Materials Section -->
+    <section class="materials-section">
+      <h2>Course Materials</h2>
+      <div class="materials-categories">
+        <button class="category-button active" data-category="all">All</button>
+        <button class="category-button" data-category="Lecture Notes">Lecture Notes</button>
+        <button class="category-button" data-category="Assignment">Assignments</button>
+        <button class="category-button" data-category="Past Exam">Past Exams</button>
+        <button class="category-button" data-category="Project">Projects</button>
+      </div>      
+
+      <div class="upload-section">
+        <h3>Upload Materials</h3>
+        <form id="upload-form" class="upload-form">
+          <div class="form-group">
+            <label for="material-title">Title:</label>
+            <input type="text" id="material-title" placeholder="e.g., Lecture 1 Notes">
+          </div>
+          <div class="form-group">
+            <label for="material-type">Type:</label>
+            <select id="material-type">
+              <option value="Lecture Notes">Lecture Notes</option>
+              <option value="Assignment">Assignment</option>
+              <option value="Past Exam">Past Exam</option>
+              <option value="Project">Project</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="material-description">Description:</label>
+            <textarea id="material-description" rows="3" placeholder="Briefly describe this material..."></textarea>
+          </div>
+          <div class="form-group file-upload">
+            <label for="material-file" class="file-label">Select File</label>
+            <input type="file" id="material-file" class="file-input">
+            <span id="file-name" class="file-name">No file chosen</span>
+          </div>
+          <button type="submit" class="upload-button">Upload Material</button>
+        </form>
+      </div>
+
+      <div class="materials-list">
+        <h3>Available Materials</h3>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="logo">
+          <span class="logo-aub">AUB</span>
+          <span class="logo-reviews">REVIEWS</span>
+        </div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">About</a>
+          <a href="#" class="footer-link">Terms of Service</a>
+          <a href="#" class="footer-link">Privacy Policy</a>
+          <a href="#" class="footer-link">Contact</a>
+        </div>
+      </div>
+      <hr class="separator">
+      <div class="copyright">
+        © 2023 AUB Reviews. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    if (!courseId) {
+      console.error("❌ No course ID provided in URL.");
+      document.getElementById("course-title").textContent = "Course not found";
+      document.getElementById("course-meta").textContent = "";
+    }
+  
+    async function fetchCourseInfo(id) {
+      try {
+        const res = await fetch("http://localhost:3000/api/courses");
+        const courses = await res.json();
+        return courses.find(c => c.id.toLowerCase() === id.toLowerCase());
+      } catch (err) {
+        console.error("Failed to fetch course info", err);
+        return null;
+      }
+    }
+  
+    async function updateCourseHeader() {
+      const course = await fetchCourseInfo(courseId);
+      if (!course) {
+        document.getElementById("course-code").textContent = "Not Found:";
+        document.getElementById("course-title").textContent = "Course not found";
+        return;
+      }
+  
+      document.getElementById("breadcrumb-code").textContent = course.code;
+      document.getElementById("course-code").textContent = `${course.code}:`;
+      document.getElementById("course-title").textContent = course.title;
+      document.getElementById("course-meta").innerHTML = `
+        <span class="department">${course.department}</span> • 
+        <span class="credits">${course.credits} credit${course.credits !== 1 ? 's' : ''}</span> • 
+        <span class="rating"> </span>
+      `;
+  
+      const navLinks = document.querySelectorAll(".course-nav a");
+
+      try {
+        const res = await fetch(`http://localhost:3000/api/reviews/${courseId}`);
+        const reviews = await res.json();
+
+        const count = reviews.length;
+        const total = reviews.reduce((sum, r) => sum + (r.rating || 0), 0);
+        const avg = count ? (total / count).toFixed(1) : "N/A";
+
+        const ratingEl = document.querySelector(".course-meta .rating");
+        if (ratingEl) ratingEl.textContent = avg !== "N/A" ? `★ ${avg}` : "★ -";
+      } catch (err) {
+        console.error("Failed to load rating:", err);
+      }
+    }
+  
+    async function fetchMaterials() {
+      const res = await fetch(`http://localhost:3000/api/materials?course=${courseId}`);
+      const materials = await res.json();
+      renderMaterials(materials);
+    }
+  
+    function renderMaterials(materials) {
+      const container = document.querySelector(".materials-list");
+      const list = container.querySelectorAll(".material-card");
+      list.forEach(el => el.remove());
+  
+      if (materials.length === 0) {
+        const empty = document.createElement("p");
+        empty.style.color = "#aaa";
+        empty.textContent = "No materials uploaded for this course yet.";
+        container.appendChild(empty);
+        return;
+      }
+  
+      materials.forEach(m => {
+        const card = document.createElement("div");
+        card.className = "material-card";
+        card.setAttribute("data-category", m.type);
+        card.innerHTML = `
+          <div class="material-info">
+            <h4>${m.title}</h4>
+            <p class="material-meta">
+              <span class="material-type">${m.type}</span> • 
+              <span class="material-date">${new Date(m.uploadedAt).toLocaleDateString()}</span> • 
+              <span class="material-uploader">Uploaded by ${m.uploadedBy}</span>
+            </p>
+            <p class="material-description">${m.description}</p>
+          </div>
+          <div class="material-actions">
+            <a href="${m.url}" target="_blank"><button class="download-button">Download</button></a>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+  
+    document.getElementById("upload-form").addEventListener("submit", async e => {
+      e.preventDefault();
+      const title = document.getElementById("material-title").value.trim();
+      const type = document.getElementById("material-type").value;
+      const description = document.getElementById("material-description").value.trim();
+      const fileInput = document.getElementById("material-file");
+  
+      if (!title || !type || !fileInput.files[0]) {
+        alert("Please fill all fields and select a file.");
+        return;
+      }
+  
+      const formData = new FormData();
+      formData.append("courseId", courseId);
+      formData.append("title", title);
+      formData.append("type", type);
+      formData.append("description", description);
+      formData.append("uploadedBy", "Student");
+      formData.append("file", fileInput.files[0]);
+  
+      const res = await fetch("http://localhost:3000/api/materials", {
+        method: "POST",
+        body: formData
+      });
+  
+      if (res.ok) {
+        document.getElementById("upload-form").reset();
+        document.getElementById("file-name").textContent = "No file chosen";
+        fetchMaterials();
+      } else {
+        alert("Upload failed.");
+      }
+    });
+  
+    document.getElementById("material-file").addEventListener("change", e => {
+      document.getElementById("file-name").textContent = e.target.files[0]?.name || "No file chosen";
+    });
+
+    // 🔁 Category filtering logic
+    document.querySelectorAll(".category-button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const selected = btn.getAttribute("data-category");
+
+        // Toggle active button UI
+        document.querySelectorAll(".category-button").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        // Filter materials
+        const cards = document.querySelectorAll(".material-card");
+        cards.forEach(card => {
+          const category = card.getAttribute("data-category");
+          if (selected === "all" || category === selected) {
+            card.style.display = "block";
+          } else {
+            card.style.display = "none";
+          }
+        });
+      });
+    });
+  
+    // Initial load
+    updateCourseHeader();
+    fetchMaterials();
+  </script>  
+  
+</body>
+</html>
