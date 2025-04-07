@@ -110,6 +110,13 @@
       </footer>
     </div>
 
+    <script>
+      const API_BASE = window.location.hostname.includes("localhost")
+        ? "http://localhost:3000"
+        : "https://aub-courses-qhnx.onrender.com"; // 🔁 Replace with your actual Render backend URL
+    </script>
+    
+
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script>
@@ -122,7 +129,7 @@
     
       async function fetchCourses() {
         try {
-          const res = await fetch("http://localhost:3000/api/courses");
+          const res = await fetch(`${API_BASE}/api/courses`);
           const data = await res.json();
           allCourses = Array.isArray(data) ? data : [];
           filteredCourses = [...allCourses]; // Initialize
@@ -237,7 +244,7 @@
         ratingSpans.forEach(async span => {
           const courseId = span.getAttribute("data-course-id");
           try {
-            const res = await fetch(`http://localhost:3000/api/reviews/${courseId}`);
+            const res = await fetch(`${API_BASE}/api/reviews/${courseId}`);
             const reviews = await res.json();
 
             const total = reviews.reduce((sum, r) => sum + (r.rating || 0), 0);

@@ -259,6 +259,13 @@
   </footer>
 
   <script>
+    const API_BASE = window.location.hostname.includes("localhost")
+      ? "http://localhost:3000"
+      : "https://your-backend-name.onrender.com"; // 🔁 Replace with your actual Render backend URL
+  </script>
+  
+
+  <script>
     // Review form submission
     document.getElementById('review-form').addEventListener('submit', function(e) {
       e.preventDefault();
@@ -289,7 +296,7 @@
   <script>
     async function fetchCourse(courseId) {
       try {
-        const res = await fetch("http://localhost:3000/api/courses");
+        const res = await fetch(`${API_BASE}/api/courses`);
         const courses = await res.json();
         return courses.find(c => c.id.toLowerCase() === courseId?.toLowerCase());
       } catch (err) {
@@ -320,7 +327,7 @@
         `;
       }
       try {
-        const res = await fetch(`http://localhost:3000/api/reviews/${courseId}`);
+        const res = await fetch(`${API_BASE}/api/reviews/${courseId}`);
         const reviews = await res.json();
 
         const count = reviews.length;
@@ -364,7 +371,7 @@
       }
 
       try {
-        const res = await fetch("http://localhost:3000/api/reviews", {
+        const res = await fetch(`${API_BASE}/api/reviews`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ courseId, title, rating, text, contentRating, difficultyRating, workloadRating, professorRating })
@@ -392,7 +399,7 @@
       if (!courseId || !container) return;
 
       try {
-        const res = await fetch(`http://localhost:3000/api/reviews/${courseId}`);
+        const res = await fetch(`${API_BASE}/api/reviews/${courseId}`);
         const reviews = await res.json();
 
         if (!Array.isArray(reviews)) throw new Error("Invalid data");
@@ -494,7 +501,7 @@
         if (!reviewId) return;
 
         try {
-          const res = await fetch(`http://localhost:3000/api/reviews/${reviewId}/helpful`, {
+          const res = await fetch(`${API_BASE}/api/reviews/${reviewId}/helpful`, {
             method: "PATCH"
           });
 

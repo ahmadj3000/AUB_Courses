@@ -156,6 +156,13 @@
   </footer>
 
   <script>
+    const API_BASE = window.location.hostname.includes("localhost")
+      ? "http://localhost:3000"
+      : "https://aub-courses-qhnx.onrender.com"; // 🔁 Replace with your actual Render backend URL
+  </script>
+  
+
+  <script>
     if (!courseId) {
       console.error("❌ No course ID provided in URL.");
       document.getElementById("course-title").textContent = "Course not found";
@@ -164,7 +171,7 @@
   
     async function fetchCourseInfo(id) {
       try {
-        const res = await fetch("http://localhost:3000/api/courses");
+        const res = await fetch(`${API_BASE}/api/courses`);
         const courses = await res.json();
         return courses.find(c => c.id.toLowerCase() === id.toLowerCase());
       } catch (err) {
@@ -193,7 +200,7 @@
       const navLinks = document.querySelectorAll(".course-nav a");
 
       try {
-        const res = await fetch(`http://localhost:3000/api/reviews/${courseId}`);
+        const res = await fetch(`${API_BASE}/reviews/${courseId}`);
         const reviews = await res.json();
 
         const count = reviews.length;
@@ -208,7 +215,7 @@
     }
   
     async function fetchMaterials() {
-      const res = await fetch(`http://localhost:3000/api/materials?course=${courseId}`);
+      const res = await fetch(`${API_BASE}/materials?course=${courseId}`);
       const materials = await res.json();
       renderMaterials(materials);
     }
@@ -268,7 +275,7 @@
       formData.append("uploadedBy", "Student");
       formData.append("file", fileInput.files[0]);
   
-      const res = await fetch("http://localhost:3000/api/materials", {
+      const res = await fetch(`${API_BASE}/api/materials`, {
         method: "POST",
         body: formData
       });

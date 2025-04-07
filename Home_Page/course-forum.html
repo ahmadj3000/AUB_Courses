@@ -171,6 +171,13 @@
   </footer>
 
   <script>
+    const API_BASE = window.location.hostname.includes("localhost")
+      ? "http://localhost:3000"
+      : "https://aub-courses-qhnx.onrender.com"; // 🔁 Replace with your actual Render backend URL
+  </script>
+  
+
+  <script>
     const newPostBtn = document.querySelector('.new-post-button');
     const postFormContainer = document.getElementById('post-form-container');
     const cancelPostBtn = document.getElementById('cancel-post');
@@ -204,7 +211,7 @@
       }
   
       try {
-        const res = await fetch('http://localhost:3000/api/forum', {
+        const res = await fetch(`${API_BASE}/api/forum`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ title, category, content, courseId })
@@ -234,7 +241,7 @@
     async function loadPosts() {
       if (!courseId) return;
       try {
-        const res = await fetch(`http://localhost:3000/api/forum/${courseId}`);
+        const res = await fetch(`${API_BASE}/api/forum/${courseId}`);
         const posts = await res.json();
         allPosts = posts;
         applySortAndFilter();
@@ -296,7 +303,7 @@
         const direction = isUp ? 'up' : 'down';
 
         try {
-          const res = await fetch(`http://localhost:3000/api/forum/${postId}/vote`, {
+          const res = await fetch(`${API_BASE}/api/forum/${postId}/vote`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ direction })
@@ -346,7 +353,7 @@
             return;
           }
 
-          fetch(`http://localhost:3000/api/forum/${postId}/answer`, {
+          fetch(`${API_BASE}/api/forum/${postId}/answer`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ content })
@@ -379,7 +386,7 @@
 
           // Fetch answers
           try {
-            const res = await fetch(`http://localhost:3000/api/forum/${postId}/answers`);
+            const res = await fetch(`${API_BASE}/api/forum/${postId}/answers`);
             const answers = await res.json();
 
             section.innerHTML = answers.length
@@ -460,7 +467,7 @@
   <script>
     async function fetchCourse(courseId) {
       try {
-        const res = await fetch("http://localhost:3000/api/courses");
+        const res = await fetch(`${API_BASE}/api/courses`);
         const courses = await res.json();
         return courses.find(c => c.id.toLowerCase() === courseId?.toLowerCase());
       } catch (err) {
@@ -491,7 +498,7 @@
         `;
       }
       try {
-        const res = await fetch(`http://localhost:3000/api/reviews/${courseId}`);
+        const res = await fetch(`${API_BASE}/api/reviews/${courseId}`);
         const reviews = await res.json();
 
         const count = reviews.length;
