@@ -215,7 +215,7 @@
     }
   
     async function fetchMaterials() {
-      const res = await fetch(`${API_BASE}/materials?course=${courseId}`);
+      const res = await fetch(`${API_BASE}/api/materials?course=${courseId}`);
       const materials = await res.json();
       renderMaterials(materials);
     }
