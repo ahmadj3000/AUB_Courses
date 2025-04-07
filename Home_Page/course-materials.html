@@ -200,7 +200,7 @@
       const navLinks = document.querySelectorAll(".course-nav a");
 
       try {
-        const res = await fetch(`${API_BASE}/reviews/${courseId}`);
+        const res = await fetch(`${API_BASE}/api/reviews/${courseId}`);
         const reviews = await res.json();
 
         const count = reviews.length;
