@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
     loginForm.classList.remove("active");
     registerForm.classList.add("active");
+    history.replaceState(null, null, "#register");
   });
 
   // Show the login form when clicking "Login"
@@ -16,6 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
     registerForm.classList.remove("active");
     loginForm.classList.add("active");
+    history.replaceState(null, null, "#login");
   });
 
   // PASSWORD TOGGLE FUNCTIONALITY
@@ -91,4 +93,14 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("❌ Server error");
     }
   });
+  // 🔁 Auto-switch based on URL hash
+  if (window.location.hash === "#register") {
+    showRegister.click();
+    history.replaceState(null, null, "#register"); // optional: keep #register in URL
+  }
+
+  if (window.location.hash === "#login") {
+    showLogin.click();
+    history.replaceState(null, null, "#login"); // optional: keep #login in URL
+  }  
 });
