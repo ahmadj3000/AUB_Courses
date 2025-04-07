@@ -198,7 +198,7 @@ app.get("/", (req, res) => {
 });
 
 // ✅ Catch-all fallback route
-app.get("*", (req, res) => {
+app.get(/^\/(?!api).*/, (req, res) => {
   res.sendFile(path.join(__dirname, "Home_Page", "home.html"));
 });
 
