@@ -57,11 +57,10 @@ const User = mongoose.model("User", userSchema);
 app.post("/register", async (req, res) => {
   const { username, email, password } = req.body;
 
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const verificationToken = jwt.sign({ email }, JWT_SECRET, { expiresIn: "1d" });
-
-  // ✅ Save user to database
   try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const verificationToken = jwt.sign({ email }, JWT_SECRET, { expiresIn: "1d" });
+
     const newUser = new User({
       username,
       email,
@@ -70,37 +69,45 @@ app.post("/register", async (req, res) => {
       verificationToken
     });
 
+    console.log("👉 Saving user:", newUser);
     await newUser.save();
-    console.log("✅ User saved:", newUser);
-  } catch (saveError) {
-    console.error("❌ Error saving user:", saveError);
-    return res.status(500).json({ message: "❌ Error saving user" });
-  }
+    console.log("✅ User saved successfully");
 
-  // ✅ Send verification email
-  try {
-    const verificationLink = process.env.NODE_ENV === 'production' 
+    const verificationLink = process.env.NODE_ENV === "production"
       ? `https://aub-courses-qhnx.onrender.com/verify?token=${verificationToken}`
       : `http://localhost:3000/verify?token=${verificationToken}`;
 
-    await brevoEmail.sendTransacEmail({
-      sender: { name: "AUB Courses", email: "faris-refai@hotmail.com" }, // ⚠️ Use a verified Brevo sender
-      to: [{ email, name: username }],
-      subject: "Please verify your email address",
-      htmlContent: `
-        <h2>Welcome to AUB Courses!</h2>
-        <p>Hello ${username},</p>
-        <p>Click the link below to verify your email:</p>
-        <a href="${verificationLink}">Verify Email</a>
-      `
-    });
+    // ✅ TRY TO SEND EMAIL
+    try {
+      await brevoEmail.sendTransacEmail({
+        sender: {
+          name: "AUB Courses",
+          email: "faris-refai@hotmail.com" // ✅ Use verified sender
+        },
+        to: [{ email, name: username }],
+        subject: "Please verify your email address",
+        htmlContent: `
+          <h2>Welcome to AUB Courses!</h2>
+          <p>Hello ${username},</p>
+          <p>Click the link below to verify your email:</p>
+          <a href="${verificationLink}">Verify Email</a>
+        `
+      });
 
-    res.json({ message: "✅ Registration successful! Please check your email." });
-  } catch (emailError) {
-    console.error("❌ Failed to send email:", emailError);
-    res.status(500).json({ message: "⚠️ Registered, but failed to send verification email." });
+      console.log("📧 Verification email sent!");
+      res.json({ message: "✅ Registered! Please check your email to verify your account." });
+
+    } catch (emailErr) {
+      console.error("❌ Failed to send verification email:", emailErr);
+      res.status(200).json({ message: "⚠️ Registered, but failed to send verification email." });
+    }
+
+  } catch (err) {
+    console.error("❌ Registration failed:", err);
+    res.status(400).json({ message: "❌ Registration failed!" });
   }
 });
+
 
 
 // ✅ Verify Email Route
