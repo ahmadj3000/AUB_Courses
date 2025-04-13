@@ -10,8 +10,20 @@ const multer = require("multer");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const SECRET_KEY = "your_secret_key";
+const JWT_SECRET = process.env.JWT_SECRET;
+
 const MONGO_URI = process.env.MONGO_URI;
+
+const Sib = require('sib-api-v3-sdk');
+require('dotenv').config();
+
+const client = Sib.ApiClient.instance;
+const apiKey = client.authentications['api-key'];
+apiKey.apiKey = process.env.BREVO_API_KEY;
+
+const brevoEmail = new Sib.TransactionalEmailsApi();
+
+
 
 // Middleware
 app.use(cors());
@@ -33,7 +45,9 @@ mongoose.connect(MONGO_URI)
 const userSchema = new mongoose.Schema({
   username: { type: String, unique: true, required: true },
   email: { type: String, unique: true, required: true },
-  password: { type: String, required: true }
+  password: { type: String, required: true },
+  isVerified: { type: Boolean, default: false },
+  verificationToken: { type: String }
 });
 
 const User = mongoose.model("User", userSchema);
@@ -41,13 +55,83 @@ const User = mongoose.model("User", userSchema);
 // ✅ Register Endpoint
 app.post("/register", async (req, res) => {
   const { username, email, password } = req.body;
+
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ username, email, password: hashedPassword });
-    await newUser.save();
-    res.json({ message: "✅ Registration successful!" });
+
+    const verificationToken = jwt.sign({ email }, JWT_SECRET, { expiresIn: "1d" });
+
+    const newUser = new User({
+      username,
+      email,
+      password: hashedPassword,
+      isVerified: false,
+      verificationToken
+    });
+    console.log("Saving this user:", newUser);
+    console.log("👉 Data to save:", {
+      username,
+      email,
+      password: hashedPassword,
+      isVerified: false,
+      verificationToken
+    });
+    
+    const result = await newUser.save();
+console.log("✅ Saved user:", result);
+
+
+    const verificationLink = process.env.NODE_ENV === 'production' 
+    ? `https://aub-courses-qhnx.onrender.com/verify?token=${verificationToken}`
+    : `http://localhost:3000/verify?token=${verificationToken}`;
+
+
+    await brevoEmail.sendTransacEmail({
+      sender: { name: "AUB Courses", email: "8a3ead001@smtp-brevo.com" }, // Or use a verified sender
+      to: [{ email, name: username }],
+      subject: "Please verify your email address",
+      htmlContent: `
+        <h2>Welcome to AUB Courses!</h2>
+        <p>Hello ${username},</p>
+        <p>Click the link below to verify your email:</p>
+        <a href="${verificationLink}">Verify Email</a>
+      `
+    });
+
+    res.json({ message: "✅ Registration successful! Please check your email." });
   } catch (err) {
-    res.status(400).json({ message: "❌ User already exists!" });
+    console.error(err);
+    res.status(400).json({ message: "❌ Registration failed!" });
+  }
+});
+
+// ✅ Verify Email Route
+app.get("/verify", async (req, res) => {
+  const { token } = req.query;
+
+  if (!token) {
+    return res.status(400).json({ message: "❌ No token provided!" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);  // Verify the token
+
+    const user = await User.findOne({ email: decoded.email });
+    if (!user) {
+      return res.status(404).json({ message: "❌ User not found!" });
+    }
+
+    if (user.isVerified) {
+      return res.status(400).json({ message: "❌ This email is already verified." });
+    }
+
+    user.isVerified = true;
+    user.verificationToken = null;  // Optionally, remove the token after verification
+    await user.save();
+
+    res.json({ message: "✅ Email successfully verified!" });
+  } catch (err) {
+    res.status(400).json({ message: "❌ Invalid or expired token!" });
   }
 });
 
@@ -61,6 +145,11 @@ app.post("/login", async (req, res) => {
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(400).json({ message: "❌ Invalid username or password" });
     }
+    
+    if (!user.isVerified) {
+      return res.status(403).json({ message: "❌ Please verify your email before logging in." });
+    }
+    
 
     const token = jwt.sign({ userId: user._id }, SECRET_KEY, { expiresIn: "1h" });
     res.json({ message: "✅ Login successful!", token });
