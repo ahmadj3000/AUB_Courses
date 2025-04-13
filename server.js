@@ -86,7 +86,7 @@ const verificationToken = jwt.sign({ email }, JWT_SECRET, { expiresIn: "1d" });
       await brevoEmail.sendTransacEmail({
         sender: {
           name: "AUB Courses",
-          email:  "faris-refai@hotmail.com" // ✅ Use verified sender
+          email:  "faris-refai@Hotmail.com" // ✅ Use verified sender
         },
         to: [{ email, name: username }],
         subject: "Please verify your email address",
