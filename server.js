@@ -59,7 +59,11 @@ app.post("/register", async (req, res) => {
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
-    const verificationToken = jwt.sign({ email }, JWT_SECRET, { expiresIn: "1d" });
+
+// Log to verify JWT_SECRET is defined
+console.log("JWT_SECRET:", JWT_SECRET);
+
+const verificationToken = jwt.sign({ email }, JWT_SECRET, { expiresIn: "1d" });
 
     const newUser = new User({
       username,
