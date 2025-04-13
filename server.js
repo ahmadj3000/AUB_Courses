@@ -82,7 +82,7 @@ app.post("/register", async (req, res) => {
       await brevoEmail.sendTransacEmail({
         sender: {
           name: "AUB Courses",
-          email: "faris-refai@hotmail.com" // ✅ Use verified sender
+          email:  "8a3ead001@smtp-brevo.com" // ✅ Use verified sender
         },
         to: [{ email, name: username }],
         subject: "Please verify your email address",
@@ -98,7 +98,8 @@ app.post("/register", async (req, res) => {
       res.json({ message: "✅ Registered! Please check your email to verify your account." });
 
     } catch (emailErr) {
-      console.error("❌ Failed to send verification email:", emailErr);
+      console.error("❌ Failed to send email. Reason:", emailErr.response?.body || emailErr.message || emailErr);
+
       res.status(200).json({ message: "⚠️ Registered, but failed to send verification email." });
     }
 
