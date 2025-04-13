@@ -53,14 +53,15 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model("User", userSchema);
 
 // ✅ Register Endpoint
+// ✅ Register Endpoint
 app.post("/register", async (req, res) => {
   const { username, email, password } = req.body;
 
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const verificationToken = jwt.sign({ email }, JWT_SECRET, { expiresIn: "1d" });
+
+  // ✅ Save user to database
   try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const verificationToken = jwt.sign({ email }, JWT_SECRET, { expiresIn: "1d" });
-
     const newUser = new User({
       username,
       email,
@@ -68,26 +69,22 @@ app.post("/register", async (req, res) => {
       isVerified: false,
       verificationToken
     });
-    console.log("Saving this user:", newUser);
-    console.log("👉 Data to save:", {
-      username,
-      email,
-      password: hashedPassword,
-      isVerified: false,
-      verificationToken
-    });
-    
-    const result = await newUser.save();
-console.log("✅ Saved user:", result);
 
+    await newUser.save();
+    console.log("✅ User saved:", newUser);
+  } catch (saveError) {
+    console.error("❌ Error saving user:", saveError);
+    return res.status(500).json({ message: "❌ Error saving user" });
+  }
 
+  // ✅ Send verification email
+  try {
     const verificationLink = process.env.NODE_ENV === 'production' 
-    ? `https://aub-courses-qhnx.onrender.com/verify?token=${verificationToken}`
-    : `http://localhost:3000/verify?token=${verificationToken}`;
-
+      ? `https://aub-courses-qhnx.onrender.com/verify?token=${verificationToken}`
+      : `http://localhost:3000/verify?token=${verificationToken}`;
 
     await brevoEmail.sendTransacEmail({
-      sender: { name: "AUB Courses", email: "8a3ead001@smtp-brevo.com" }, // Or use a verified sender
+      sender: { name: "AUB Courses", email: "faris-refai@hotmail.com" }, // ⚠️ Use a verified Brevo sender
       to: [{ email, name: username }],
       subject: "Please verify your email address",
       htmlContent: `
@@ -99,11 +96,12 @@ console.log("✅ Saved user:", result);
     });
 
     res.json({ message: "✅ Registration successful! Please check your email." });
-  } catch (err) {
-    console.error(err);
-    res.status(400).json({ message: "❌ Registration failed!" });
+  } catch (emailError) {
+    console.error("❌ Failed to send email:", emailError);
+    res.status(500).json({ message: "⚠️ Registered, but failed to send verification email." });
   }
 });
+
 
 // ✅ Verify Email Route
 app.get("/verify", async (req, res) => {
