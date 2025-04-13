@@ -15,7 +15,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 const MONGO_URI = process.env.MONGO_URI;
 
 const Sib = require('sib-api-v3-sdk');
-require('dotenv').config();
+
 
 const client = Sib.ApiClient.instance;
 const apiKey = client.authentications['api-key'];
