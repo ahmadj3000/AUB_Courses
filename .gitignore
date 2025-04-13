@@ -1,6 +1,6 @@
 .qodo
 node_modules/
-.env
+.envv
 npm-debug.log
 *.log
 .DS_Store
