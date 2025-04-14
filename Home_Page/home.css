@@ -481,3 +481,77 @@
     }
   }
   
+  /* Profile Circle */
+.profile-circle {
+  width: 40px;
+  height: 40px;
+  background-color: #ea384c;
+  color: white;
+  border-radius: 50%;
+  font-size: 1rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 20px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.profile-circle:hover {
+  background-color: #d12e40;
+}
+
+/* Floating Panel */
+.user-panel {
+  position: absolute;
+  top: 70px;
+  right: 40px;
+  background-color: rgba(20, 22, 30, 0.95);
+  border: 1px solid #333;
+  border-radius: 10px;
+  padding: 1rem;
+  width: 250px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  z-index: 999;
+  animation: fadeSlide 0.3s ease forwards;
+}
+
+.user-panel .info-line {
+  font-size: 0.9rem;
+  color: #ccc;
+  margin-bottom: 10px;
+}
+
+.logout-button {
+  background-color: #ea384c;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.logout-button:hover {
+  background-color: #d12e40;
+}
+
+.hidden {
+  display: none;
+}
+
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+  

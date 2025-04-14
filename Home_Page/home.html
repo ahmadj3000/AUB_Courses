@@ -23,6 +23,10 @@
             <a href="/Login_Page/login.html#login" class="login-link">Log in</a>
             <a href="/Login_Page/login.html#register" class="signup-button">Sign up</a>
           </div>
+
+          <!-- Profile Circle: hidden by default, shown only if logged in -->
+<div id="profile-circle" class="profile-circle hidden" onclick="toggleUserPanel()">A</div>
+
         </div>
       </header>
 
@@ -262,5 +266,14 @@
       document.getElementById('current-year').textContent = new Date().getFullYear();
     </script>
     
+    <!-- Floating user panel (dropdown style) -->
+<div id="user-panel" class="user-panel hidden">
+  <p class="info-line"><strong>Username:</strong> <span id="panel-username"></span></p>
+  <p class="info-line"><strong>Email:</strong> <span id="panel-email"></span></p>
+  <button class="logout-button" onclick="logoutUser()">Sign Out</button>
+</div>
+
+<script src="header-user-panel.js"></script>
+
   </body>
 </html>
