@@ -164,7 +164,9 @@ app.post("/login", async (req, res) => {
     
 
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: "1h" });
-    res.json({ message: "✅ Login successful!", token });
+    res.json({ message: "✅ Login successful!", token, userId: user._id  });//This allows the frontend to save the user's ID (needed to fetch their major for Gemini).
+
+
   } catch (err) {
     res.status(500).json({ message: "❌ Server error during login" });
   }
@@ -302,6 +304,56 @@ app.get("/", (req, res) => {
 app.get(/^\/(?!api).*/, (req, res) => {
   res.sendFile(path.join(__dirname, "Home_Page", "home.html"));
 });
+
+// ✅ Import and initialize Gemini
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
+// ✅ API Endpoint: GET /api/course-recommendation
+app.get("/api/course-recommendation", async (req, res) => {
+  try {
+    // Extract course ID and user ID from query parameters
+    const { course, userId } = req.query;
+
+    // Validate inputs
+    if (!course || !userId) {
+      return res.status(400).json({ error: "Missing course or userId" });
+    }
+
+    // Fetch the user from MongoDB using userId
+    const user = await User.findById(userId);
+
+    // Fetch the course from MongoDB using course id (like "chem205")
+    const courseData = await Course.findOne({ id: course.toLowerCase() });
+
+    // Check if both user and course exist
+    if (!user || !courseData) {
+      return res.status(404).json({ error: "User or course not found" });
+    }
+
+    // Extract fields for the prompt
+    const major = user.major || "Undeclared";
+    const title = courseData.title || courseData.code || course;
+    const description = courseData.description || "No description available.";
+
+    // Construct the prompt to send to Gemini
+    const prompt = `A student majoring in ${major} is considering the course "${title}". Course description: "${description}". Should the student take this course? What interests or background should they have to benefit the most?`;
+
+    // Use Gemini Pro to generate a recommendation
+    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text(); // Get plain text response
+
+    // Send back the recommendation to the frontend
+    res.json({ recommendation: text });
+  } catch (err) {
+    // Handle errors (e.g. if Gemini fails or something else breaks)
+    console.error("❌ Gemini error:", err);
+    res.status(500).json({ error: "Gemini generation failed" });
+  }
+});
+
 
 // ✅ Start Server
 app.listen(PORT, () => console.log(`🚀 Server running at http://localhost:${PORT}`));
