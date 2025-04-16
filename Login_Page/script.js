@@ -67,6 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const email = document.getElementById("registerEmail").value.trim();
     const password = document.getElementById("registerPassword").value;
     const confirm = document.getElementById("confirmPassword").value;
+    const major = document.getElementById("registerMajor").value; // ✅ ADDED
 
     if (password !== confirm) {
       alert("⚠️ Passwords do not match");
@@ -77,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const response = await fetch("https://aub-courses-qhnx.onrender.com/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, email, password }),
+        body: JSON.stringify({ username, email, password, major }),// included major
       });
 
       const data = await response.json();

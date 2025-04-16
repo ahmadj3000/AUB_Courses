@@ -47,7 +47,8 @@ const userSchema = new mongoose.Schema({
   email: { type: String, unique: true, required: true },
   password: { type: String, required: true },
   isVerified: { type: Boolean, default: false },
-  verificationToken: { type: String }
+  verificationToken: { type: String },
+  major: { type: String }  // ✅ New field added
 });
 
 const User = mongoose.model("User", userSchema);
@@ -55,7 +56,7 @@ const User = mongoose.model("User", userSchema);
 // ✅ Register Endpoint
 // ✅ Register Endpoint
 app.post("/register", async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, major } = req.body;
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -70,7 +71,8 @@ const verificationToken = jwt.sign({ email }, JWT_SECRET, { expiresIn: "1d" });
       email,
       password: hashedPassword,
       isVerified: false,
-      verificationToken
+      verificationToken,
+      major,//added major
     });
 
     console.log("👉 Saving user:", newUser);
