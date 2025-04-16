@@ -180,15 +180,25 @@ const courseSchema = new mongoose.Schema({
   materials: [{ filename: String, path: String }]
 });
 
-const Course = mongoose.model("Course", courseSchema);
+const Course = require("./Models/Course.js");
 
 // ✅ API: Create Course
 app.post("/api/courses", async (req, res) => {
   try {
-    const { code, title } = req.body;
-    if (!code) return res.status(400).json({ error: "Course code is required" });
+    const { code, title, description, department, credits, id } = req.body;
+    if (!code || !title) {
+      return res.status(400).json({ error: "Course code and title are required" });
+    }
 
-    const course = new Course({ code, title });
+    const course = new Course({
+      id,
+      code,
+      title,
+      description,
+      department,
+      credits
+    });
+
     await course.save();
     res.status(201).json(course);
   } catch (err) {
@@ -298,6 +308,11 @@ app.post("/questions/:id/reply", async (req, res) => {
 // ✅ Root: redirect to login
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "Login_Page", "login.html"));
+});
+
+// Admin panel route
+app.get("/admin", (req, res) => {
+  res.sendFile(path.join(__dirname, "Home_Page", "admin.html"));
 });
 
 // ✅ Catch-all fallback route

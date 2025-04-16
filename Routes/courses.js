@@ -20,4 +20,17 @@ router.post("/", async (req, res) => {
   }
 });
 
+// DELETE a course by ID
+router.delete("/:id", async (req, res) => {
+  try {
+    const result = await Course.findByIdAndDelete(req.params.id);
+    if (!result) {
+      return res.status(404).json({ error: "Course not found" });
+    }
+    res.status(200).json({ message: "Course deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to delete course", details: err.message });
+  }
+});
+
 module.exports = router;

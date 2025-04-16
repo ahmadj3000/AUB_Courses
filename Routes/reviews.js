@@ -31,6 +31,31 @@ router.get("/:courseId", async (req, res) => {
   }
 });
 
+// GET all reviews (for admin panel)
+router.get("/", async (req, res) => {
+  try {
+    const reviews = await Review.find().sort({ date: -1 });
+    res.json(reviews);
+  } catch (err) {
+    console.error("Error fetching all reviews:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// DELETE a review by ID
+router.delete("/:id", async (req, res) => {
+  try {
+    const result = await Review.findByIdAndDelete(req.params.id);
+    if (!result) {
+      return res.status(404).json({ error: "Review not found" });
+    }
+    res.status(200).json({ message: "Review deleted successfully" });
+  } catch (err) {
+    console.error("Error deleting review:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
 // Helpful Button
 router.patch("/:id/helpful", async (req, res) => {
   try {
