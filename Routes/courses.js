@@ -8,6 +8,8 @@ router.get("/", async (req, res) => {
   res.json(courses);
 });
 
+
+
 // POST a new course
 router.post("/", async (req, res) => {
   const courseData = req.body;
@@ -34,3 +36,9 @@ router.delete("/:id", async (req, res) => {
 });
 
 module.exports = router;
+
+
+
+
+
+
