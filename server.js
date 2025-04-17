@@ -25,6 +25,9 @@ const brevoEmail = new Sib.TransactionalEmailsApi();
 
 
 
+
+
+
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
@@ -182,7 +185,7 @@ const courseSchema = new mongoose.Schema({
 
 const Course = require("./Models/Course.js");
 
-// ✅ API: Create Course
+// ✅ API: Create Course (fixed schema)
 app.post("/api/courses", async (req, res) => {
   try {
     const { code, title, description, department, credits, id } = req.body;
