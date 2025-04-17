@@ -1,18 +1,15 @@
-const API_BASE = window.location.hostname.includes("localhost")
-  ? "http://localhost:3000"
-  : "https://aub-courses-qhnx.onrender.com";
-
 async function checkUserSession() {
   try {
     const res = await fetch(`${API_BASE}/api/user/me`, {
-      credentials: "include", // ✅ This sends the cookie
+      credentials: "include"
     });
 
     if (!res.ok) throw new Error("Not logged in");
-    const user = await res.json();
 
-    document.querySelector(".auth-buttons")?.classList.add("hidden");
+    const user = await res.json();
     const profileCircle = document.getElementById("profile-circle");
+    const userPanel = document.getElementById("user-panel");
+
     if (profileCircle) {
       profileCircle.textContent = user.username.charAt(0).toUpperCase();
       profileCircle.classList.remove("hidden");
@@ -21,9 +18,8 @@ async function checkUserSession() {
     document.getElementById("panel-username").textContent = user.username;
     document.getElementById("panel-email").textContent = user.email;
   } catch {
-    document.querySelector(".auth-buttons")?.classList.remove("hidden");
-    document.getElementById("profile-circle")?.classList.add("hidden");
-    document.getElementById("user-panel")?.classList.add("hidden");
+    // Redirect to login if not logged in
+    window.location.href = "/Login_Page/login.html";
   }
 }
 
@@ -35,7 +31,7 @@ function toggleUserPanel() {
 async function logoutUser() {
   await fetch(`${API_BASE}/api/user/logout`, {
     method: "POST",
-    credentials: "include",
+    credentials: "include"
   });
   window.location.href = "/Login_Page/login.html";
 }

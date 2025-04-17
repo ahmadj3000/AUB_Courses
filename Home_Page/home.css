@@ -523,6 +523,22 @@
   margin-bottom: 10px;
 }
 
+.user-header-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Optional: ensure user-panel animates from the circle */
+@media (max-width: 768px) {
+  .user-panel {
+    right: 20px;
+    top: 60px;
+  }
+}
+
+
 .logout-button {
   background-color: #ea384c;
   color: white;
