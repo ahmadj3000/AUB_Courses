@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
 const path = require("path");
 const multer = require("multer");
+const fs = require("fs");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -244,6 +245,17 @@ app.get("/api/courses", async (req, res) => {
     res.json(courses);
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch courses" });
+  }
+});
+
+app.get("/api/materials/download/:filename", (req, res) => {
+  const filename = req.params.filename;
+  const filePath = path.join(__dirname, "uploads", filename);
+
+  if (fs.existsSync(filePath)) {
+    res.download(filePath); // triggers browser download
+  } else {
+    res.status(404).json({ message: "File not found" });
   }
 });
 

@@ -256,7 +256,9 @@
             <p class="material-description">${m.description}</p>
           </div>
           <div class="material-actions">
-            <a href="${m.url}" target="_blank"><button class="download-button">Download</button></a>
+            <a href="${API_BASE}/api/materials/download/${m.filename}" download>
+              <button class="download-button">Download</button>
+            </a>
           </div>
         `;
         container.appendChild(card);
