@@ -68,7 +68,8 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   isVerified: { type: Boolean, default: false },
   verificationToken: { type: String },
-  major: { type: String } 
+  major: { type: String } ,
+  createdAt: { type: Date, default: Date.now },
 });
 
 const User = mongoose.model("User", userSchema);
