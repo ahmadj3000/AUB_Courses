@@ -5,16 +5,14 @@ const API_BASE = window.location.hostname.includes("localhost")
 async function checkUserSession() {
   try {
     const res = await fetch(`${API_BASE}/api/user/me`, {
-      credentials: "include"
+      credentials: "include", // ✅ This sends the cookie
     });
+
     if (!res.ok) throw new Error("Not logged in");
     const user = await res.json();
 
-    const authButtons = document.querySelector(".auth-buttons");
+    document.querySelector(".auth-buttons")?.classList.add("hidden");
     const profileCircle = document.getElementById("profile-circle");
-    const userPanel = document.getElementById("user-panel");
-
-    if (authButtons) authButtons.style.display = "none";
     if (profileCircle) {
       profileCircle.textContent = user.username.charAt(0).toUpperCase();
       profileCircle.classList.remove("hidden");
@@ -37,7 +35,7 @@ function toggleUserPanel() {
 async function logoutUser() {
   await fetch(`${API_BASE}/api/user/logout`, {
     method: "POST",
-    credentials: "include"
+    credentials: "include",
   });
   window.location.href = "/Login_Page/login.html";
 }
