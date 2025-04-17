@@ -23,11 +23,6 @@ apiKey.apiKey = process.env.BREVO_API_KEY;
 
 const brevoEmail = new Sib.TransactionalEmailsApi();
 
-
-
-
-
-
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
