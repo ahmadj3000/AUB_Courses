@@ -162,7 +162,14 @@ app.post("/login", async (req, res) => {
     
 
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: "1h" });
-    res.json({ message: "✅ Login successful!", token, userId: user._id  });//This allows the frontend to save the user's ID (needed to fetch their major for Gemini).
+    res
+    .cookie("token", token, {
+      httpOnly: true,
+      sameSite: "None",
+      secure: true, // ✅ Required for cross-origin in production
+      maxAge: 60 * 60 * 1000
+    })
+    .json({ message: "✅ Login successful!", token, userId: user._id  });//This allows the frontend to save the user's ID (needed to fetch their major for Gemini).
 
 
   } catch (err) {
