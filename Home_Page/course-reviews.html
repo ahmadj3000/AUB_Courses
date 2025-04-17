@@ -17,13 +17,16 @@
           <span class="logo-reviews">REVIEWS</span>
         </a>
       </div>
-      <div class="auth-buttons">
-        <a href="#" class="login-link">Log in</a>
-        <button class="signup-button">Sign up</button>
+      
+      <div class="user-header-container">
+        <div id="profile-circle" class="profile-circle hidden" onclick="toggleUserPanel()">U</div>
+        <div id="user-panel" class="user-panel hidden">
+          <p class="info-line"><strong>Username:</strong> <span id="panel-username"></span></p>
+          <p class="info-line"><strong>Email:</strong> <span id="panel-email"></span></p>
+          <button class="logout-button" onclick="logoutUser()">Sign Out</button>
+        </div>
       </div>
-
-      <!-- Profile Circle: hidden by default, shown only if logged in -->
-<div id="profile-circle" class="profile-circle hidden" onclick="toggleUserPanel()">A</div>
+      
 
     </div>
   </header>
@@ -540,43 +543,35 @@
 
   </script>
 
-<!-- Floating user panel (dropdown style) -->
-<div id="user-panel" class="user-panel hidden">
-  <p class="info-line"><strong>Username:</strong> <span id="panel-username"></span></p>
-  <p class="info-line"><strong>Email:</strong> <span id="panel-email"></span></p>
-  <button class="logout-button" onclick="logoutUser()">Sign Out</button>
-</div>
 
-<script src="header-user-panel.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const params = new URLSearchParams(window.location.search);
+      const course = params.get("course");
+      const userId = localStorage.getItem("userId");
 
-<!--///////////////////////////////////////////////////////////////////////////////-->
-<script>
-  document.addEventListener("DOMContentLoaded", async () => {
-    const params = new URLSearchParams(window.location.search);
-    const course = params.get("course");
-    const userId = localStorage.getItem("userId");
-
-    if (!course || !userId) {
-      document.getElementById("gemini-text").innerText = "Login and valid course required.";
-      return;
-    }
-
-    try {
-      const res = await fetch(`${API_BASE}/api/course-recommendation?course=${course}&userId=${userId}`);
-      const data = await res.json();
-
-      if (data.recommendation) {
-        document.getElementById("gemini-text").innerText = data.recommendation;
-      } else {
-        document.getElementById("gemini-text").innerText = "No AI recommendation found.";
+      if (!course || !userId) {
+        document.getElementById("gemini-text").innerText = "Login and valid course required.";
+        return;
       }
-    } catch (err) {
-      console.error("Gemini fetch error:", err);
-      document.getElementById("gemini-text").innerText = "Error loading AI suggestion.";
-    }
-  });
-</script>
 
+      try {
+        const res = await fetch(`${API_BASE}/api/course-recommendation?course=${course}&userId=${userId}`);
+        const data = await res.json();
+
+        if (data.recommendation) {
+          document.getElementById("gemini-text").innerText = data.recommendation;
+        } else {
+          document.getElementById("gemini-text").innerText = "No AI recommendation found.";
+        }
+      } catch (err) {
+        console.error("Gemini fetch error:", err);
+        document.getElementById("gemini-text").innerText = "Error loading AI suggestion.";
+      }
+    });
+  </script>
+
+  <script src="header-user-panel.js"></script>
 
 </body>
 </html>

@@ -17,13 +17,17 @@
           <span class="logo-reviews">REVIEWS</span>
         </a>
       </div>
-      <div class="auth-buttons">
-        <a href="#" class="login-link">Log in</a>
-        <button class="signup-button">Sign up</button>
-      </div>
 
       <!-- Profile Circle: hidden by default, shown only if logged in -->
-<div id="profile-circle" class="profile-circle hidden" onclick="toggleUserPanel()">A</div>
+      <div class="user-header-container">
+        <div id="profile-circle" class="profile-circle hidden" onclick="toggleUserPanel()">U</div>
+        <div id="user-panel" class="user-panel hidden">
+          <p class="info-line"><strong>Username:</strong> <span id="panel-username"></span></p>
+          <p class="info-line"><strong>Email:</strong> <span id="panel-email"></span></p>
+          <button class="logout-button" onclick="logoutUser()">Sign Out</button>
+        </div>
+      </div>
+      
     </div>
   </header>
 
@@ -527,14 +531,8 @@
     }
 
   </script>
-    <!-- Floating user panel (dropdown style) -->
-<div id="user-panel" class="user-panel hidden">
-  <p class="info-line"><strong>Username:</strong> <span id="panel-username"></span></p>
-  <p class="info-line"><strong>Email:</strong> <span id="panel-email"></span></p>
-  <button class="logout-button" onclick="logoutUser()">Sign Out</button>
-</div>
 
-<script src="header-user-panel.js"></script>
+  <script src="header-user-panel.js"></script>
 
 </body>
 </html>

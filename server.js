@@ -27,7 +27,25 @@ apiKey.apiKey = process.env.BREVO_API_KEY;
 const brevoEmail = new Sib.TransactionalEmailsApi();
 
 // Middleware
-app.use(cors());
+const allowedOrigins = [
+  "http://localhost:5500",
+  "http://localhost:5501",
+  "http://127.0.0.1:5500",
+  "http://localhost:3000",
+  "https://aub-courses-qhnx.onrender.com"
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
+}));
+
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -165,11 +183,12 @@ app.post("/login", async (req, res) => {
     
 
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: "1h" });
+    const isProd = process.env.NODE_ENV === "production";
     res
     .cookie("token", token, {
       httpOnly: true,
-      sameSite: "None",
-      secure: true, // ✅ Required for cross-origin in production
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",      
       maxAge: 60 * 60 * 1000
     })
     .json({ message: "✅ Login successful!", token, userId: user._id  });//This allows the frontend to save the user's ID (needed to fetch their major for Gemini).

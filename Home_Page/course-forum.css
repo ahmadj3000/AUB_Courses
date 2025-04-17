@@ -546,6 +546,44 @@
     color: #666;
   }
   
+  .user-header-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: relative;
+  }
+  
+  .profile-circle {
+    background-color: #f44;
+    color: white;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 18px;
+    cursor: pointer;
+  }
+  
+  .user-panel {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background-color: #1e1e2f;
+    border: 1px solid #444;
+    padding: 1rem;
+    border-radius: 8px;
+    color: #ddd;
+    z-index: 1000;
+    min-width: 200px;
+  }
+  
+  .user-panel.hidden {
+    display: none;
+  }
+  
   /* Responsive Design */
   @media (max-width: 768px) {
     .course-nav {
