@@ -595,43 +595,54 @@
     color: #666;
   }
   
+  /* Floating Panel */
+  .user-panel {
+    position: absolute;
+    top: 70px;
+    right: 40px;
+    background-color: rgba(20, 22, 30, 0.95);
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 1rem;
+    width: 250px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    z-index: 999;
+    animation: fadeSlide 0.3s ease forwards;
+  }
+
+  .user-panel .info-line {
+    font-size: 0.9rem;
+    color: #ccc;
+    margin-bottom: 10px;
+  }
+
   .user-header-container {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 1rem;
-    position: relative;
   }
   
-  .profile-circle {
-    background-color: #f44;
+  .logout-button {
+    background-color: #ea384c;
     color: white;
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: bold;
-    font-size: 18px;
+    border: none;
+    padding: 0.5rem 1rem;
+    width: 100%;
+    border-radius: 6px;
+    font-weight: 500;
     cursor: pointer;
+    transition: background-color 0.2s;
   }
   
-  .user-panel {
-    position: absolute;
-    top: 50px;
-    right: 0;
-    background-color: #1e1e2f;
-    border: 1px solid #444;
-    padding: 1rem;
-    border-radius: 8px;
-    color: #ddd;
-    z-index: 1000;
-    min-width: 200px;
+  .logout-button:hover {
+    background-color: #d12e40;
   }
   
-  .user-panel.hidden {
+  .hidden {
     display: none;
   }
+
   
 
   /* Responsive Design */
