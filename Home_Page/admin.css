@@ -6,6 +6,8 @@
   color: #f0f0f0;
 }
 
+
+
 .admin-header {
   margin-bottom: 2rem;
   border-bottom: 1px solid #333;
@@ -14,6 +16,8 @@
   justify-content: space-between;
   align-items: center;
 }
+
+
 
 .admin-header h1 {
   font-size: 1.8rem;

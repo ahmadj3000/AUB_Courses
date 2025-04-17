@@ -230,6 +230,8 @@
           </div>
         `).join('');
         
+
+
         // Add event listeners to delete buttons
         document.querySelectorAll('[data-course-id]').forEach(button => {
           button.addEventListener('click', function() {
@@ -242,16 +244,22 @@
       }
     }
     
+
+
     // Add course
     courseForm.addEventListener('submit', async function(e) {
   e.preventDefault();
   
+
+
   const code = document.getElementById('course-code').value;
   const title = document.getElementById('course-title').value;
   const description = document.getElementById('course-description').value;
   const department = document.getElementById('course-department').value;
   const credits = Number(document.getElementById('course-credits').value);
   const id = document.getElementById('course-id').value
+
+
 
   try {
     const response = await fetch(`${API_BASE}/api/courses`, {
@@ -261,6 +269,8 @@
       },
       body: JSON.stringify({ code, title, description, department, credits, id })
     });
+
+
 
     if (response.ok) {
       courseForm.reset();
@@ -275,6 +285,7 @@
     alert('Failed to add course. Please try again.');
   }
 });
+
 
     
     // Delete course
