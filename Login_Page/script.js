@@ -1,3 +1,7 @@
+const API_BASE = window.location.hostname.includes("onrender.com")
+  ? "https://aub-courses-qhnx.onrender.com"
+  : "http://localhost:3000";
+
 document.addEventListener("DOMContentLoaded", () => {
   const loginForm = document.getElementById("loginForm");
   const registerForm = document.getElementById("registerForm");
@@ -41,10 +45,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const password = document.getElementById("loginPassword").value;
 
     try {
-      const response = await fetch("https://aub-courses-qhnx.onrender.com/login", {
+      const response = await fetch(`${API_BASE}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username: email, password }),
+        credentials: "include"
       });
 
       const data = await response.json();
@@ -75,10 +80,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      const response = await fetch("https://aub-courses-qhnx.onrender.com/register", {
+      const response = await fetch(`${API_BASE}/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, email, password, major }),// included major
+        credentials: "include"
       });
 
       const data = await response.json();

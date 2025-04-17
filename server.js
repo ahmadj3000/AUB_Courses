@@ -11,7 +11,7 @@ const fs = require("fs");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = process.env.JWT_SECRET || "dev_secret";
 
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
@@ -27,12 +27,10 @@ apiKey.apiKey = process.env.BREVO_API_KEY;
 
 const brevoEmail = new Sib.TransactionalEmailsApi();
 
-// Middleware
+
 const allowedOrigins = [
-  "http://localhost:5500",
   "http://localhost:5501",
-  "http://127.0.0.1:5500",
-  "http://localhost:3000",
+  "http://127.0.0.1:5501",
   "https://aub-courses-qhnx.onrender.com"
 ];
 
@@ -46,6 +44,8 @@ app.use(cors({
   },
   credentials: true
 }));
+
+
 
 app.use(bodyParser.json());
 app.use(express.json());
@@ -68,7 +68,7 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   isVerified: { type: Boolean, default: false },
   verificationToken: { type: String },
-  major: { type: String }  // ✅ New field added
+  major: { type: String } 
 });
 
 const User = mongoose.model("User", userSchema);
@@ -169,36 +169,35 @@ app.get("/verify", async (req, res) => {
 
 // ✅ Login Endpoint
 app.post("/login", async (req, res) => {
-  const { username, password } = req.body;
   try {
-    const user = await User.findOne({
-      $or: [{ username }, { email: username }]
-    });
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res.status(400).json({ message: "❌ Invalid username or password" });
-    }
-    
+    const { username, password } = req.body;
+
+    const user = await User.findOne({ $or: [{ username }, { email: username }] });
+    if (!user) return res.status(400).json({ message: "User not found" });
+
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) return res.status(401).json({ message: "Incorrect password" });
+
     if (!user.isVerified) {
-      return res.status(403).json({ message: "❌ Please verify your email before logging in." });
+      return res.status(403).json({ message: "Please verify your email." });
     }
-    
 
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: "1h" });
-    const isProd = process.env.NODE_ENV === "production";
-    res
-    .cookie("token", token, {
+
+    res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",      
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
       maxAge: 60 * 60 * 1000
-    })
-    .json({ message: "✅ Login successful!", token, userId: user._id  });//This allows the frontend to save the user's ID (needed to fetch their major for Gemini).
+    });
 
-
-  } catch (err) {
-    res.status(500).json({ message: "❌ Server error during login" });
+    res.status(200).json({ message: "Login successful" });
+  }
+   catch (err) {
+    res.status(500).json({ message: "Internal server error" });
   }
 });
+
 
 // ✅ Course Schema
 const courseSchema = new mongoose.Schema({
