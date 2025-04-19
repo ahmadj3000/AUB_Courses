@@ -47,7 +47,8 @@
           <h3>AI Course Insight</h3>
           <p id="gemini-text">Loading AI recommendation...</p>
         </div>
-      <p>Loading course info...</p>
+      
+        <p>Loading course info...</p>
       </div>
       
 
@@ -306,16 +307,16 @@
         document.getElementById("gemini-text").innerText = "No course selected";
         return;
       }
-
+      // Update the fetch call in your AI recommendation script
       try {
         console.log("Fetching recommendation for course:", course);
-        const res = await fetch(`${API_BASE}/api/course-recommendation?course=${course}`, {
+        const res = await fetch(`${API_BASE}/api/course-recommendation?course=${course}`, {  // Changed endpoint format
           credentials: "include",
           headers: {
             "Content-Type": "application/json"
           }
         });
-
+        
         if (!res.ok) {
           console.error("Recommendation API error:", await res.text());
           throw new Error('Failed to fetch recommendation');
@@ -331,37 +332,6 @@
       } catch (err) {
         console.error("Gemini fetch error:", err);
         document.getElementById("gemini-text").innerText = "Please log in to see AI suggestions.";
-      }
-
-      // Fetch course info
-      try {
-        const courseRes = await fetch(`${API_BASE}/api/courses/${course}`);
-        if (!courseRes.ok) {
-          console.error("Course API error:", await courseRes.text());
-          throw new Error('Failed to fetch course info');
-        }
-        const courseData = await courseRes.json();
-        document.getElementById("course-code").textContent = courseData.code;
-        document.getElementById("course-title").textContent = courseData.title;
-        // Update other course info elements as needed
-      } catch (err) {
-        console.error("Course fetch error:", err);
-        document.getElementById("course-title").textContent = "Failed to load course info.";
-      }
-
-      // Fetch reviews
-      try {
-        const reviewsRes = await fetch(`${API_BASE}/api/reviews/${course}`);
-        if (!reviewsRes.ok) {
-          console.error("Reviews API error:", await reviewsRes.text());
-          throw new Error('Failed to fetch reviews');
-        }
-        const reviewsData = await reviewsRes.json();
-        // Process and display reviews data
-        // Example: document.getElementById("reviews-list").innerHTML = ...
-      } catch (err) {
-        console.error("Reviews fetch error:", err);
-        document.getElementById("reviews-list").innerHTML = "<p>Failed to load reviews.</p>";
       }
     });
   </script>
