@@ -555,17 +555,27 @@
       }
 
       try {
-        const res = await fetch(`${API_BASE}/api/course-recommendation?course=${course}&userId=${userId}`);
+        const res = await fetch(`${API_BASE}/api/course-recommendation?course=${course}&userId=${userId}`, {
+          credentials: "include",  // Add this line to include credentials
+          headers: {
+            "Content-Type": "application/json"
+          }
+        });
+        
+        if (!res.ok) {
+          throw new Error('Failed to fetch recommendation');
+        }
+
         const data = await res.json();
 
         if (data.recommendation) {
           document.getElementById("gemini-text").innerText = data.recommendation;
         } else {
-          document.getElementById("gemini-text").innerText = "No AI recommendation found.";
+          document.getElementById("gemini-text").innerText = "No AI recommendation available for this course.";
         }
       } catch (err) {
         console.error("Gemini fetch error:", err);
-        document.getElementById("gemini-text").innerText = "Error loading AI suggestion.";
+        document.getElementById("gemini-text").innerText = "Unable to load AI suggestion at this time.";
       }
     });
   </script>
