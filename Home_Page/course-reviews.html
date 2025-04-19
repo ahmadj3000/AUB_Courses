@@ -335,6 +335,7 @@
 
       // Fetch course info
       try {
+        console.log("Fetching course info for course:", course);
         const courseRes = await fetch(`${API_BASE}/api/courses/${course}`);
         if (!courseRes.ok) {
           console.error("Course API error:", await courseRes.text());
