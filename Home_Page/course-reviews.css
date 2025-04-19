@@ -714,3 +714,25 @@
       text-align: center;
     }
   }
+.ai-suggestion-box {
+  background-color: rgba(30, 30, 47, 0.9);
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #444;
+  color: #ddd;
+  margin-top: 1rem;
+  max-width: 400px;
+  float: right;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.ai-suggestion-box h3 {
+  margin-top: 0;
+  font-size: 1.2rem;
+  color: #ea384c;
+}
+
+.ai-suggestion-box p {
+  font-size: 1rem;
+  line-height: 1.5;
+}
