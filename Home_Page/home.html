@@ -82,7 +82,6 @@
             </div>
           </div>-->
           <div class="filters" id="filters-container">
-            <!--
             <h3>Filter by Department</h3>
             <div class="filter-buttons">
               <button class="dept-button active" onclick="filterByDepartment(null)">All</button>
@@ -125,7 +124,6 @@
               <button class="dept-button" onclick="filterByDepartment('Statistics')">Statistics</button>
             </div>
           </div>
-        -->
           
 
           <!-- Course Grid -->
@@ -181,17 +179,12 @@
     
       const courseGrid = document.getElementById("course-grid");
       const noCoursesMsg = document.getElementById("no-courses");
-
-      //
-      let allDepartments = new Set();
     
       async function fetchCourses() {
         try {
           const res = await fetch(`${API_BASE}/api/courses`);
           const data = await res.json();
           allCourses = Array.isArray(data) ? data : [];
-          allDepartments = new Set(allCourses.map(course => course.department).filter(Boolean));
-          renderDepartmentButtons(); // ⬅ new function to render buttons
           filteredCourses = [...allCourses]; // Initialize
           renderCourses(filteredCourses);
         } catch (err) {
@@ -298,25 +291,6 @@
           updateRatingsFromReviews();
         });
       }
-      function renderDepartmentButtons() {
-        const container = document.getElementById("filters-container");
-      
-        const buttonsHTML = `
-          <h3>Filter by Department</h3>
-          <div class="filter-buttons">
-            <button class="dept-button active" onclick="filterByDepartment(null)">All</button>
-            ${[...allDepartments].sort().map(dept => `
-              <button class="dept-button" onclick="filterByDepartment('${dept.replace(/'/g, "\\'")}')">${dept}</button>
-            `).join("")}
-          </div>
-        `;
-      
-        container.innerHTML = buttonsHTML;
-      }
-      
-      
-
-      
       async function updateRatingsFromReviews() {
         const ratingSpans = document.querySelectorAll(".rating[data-course-id]");
 
