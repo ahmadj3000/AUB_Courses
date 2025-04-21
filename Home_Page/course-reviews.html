@@ -43,7 +43,7 @@
         <span id="course-title">Loading course...</span>
       </h1>
       <div class="course-meta" id="course-meta">
-        <div id="gemini-recommendation" style="
+        <div id="ai-suggestion" style="
           background-color: #1e1e2f;
           padding: 1rem;
           border-radius: 8px;
@@ -54,7 +54,7 @@
           float: right;
         ">
           <h3 style="margin-top: 0;">AI Suggestion</h3>
-          <p id="gemini-text">Loading recommendation...</p>
+          <p id="ai-text">Loading recommendation...</p>
         </div>
       
         <p>Loading course info...</p>
@@ -548,24 +548,20 @@
       const params = new URLSearchParams(window.location.search);
       const course = params.get("course");
       const userId = localStorage.getItem("userId");
+      const aiText = document.getElementById("ai-text");
 
       if (!course || !userId) {
-        document.getElementById("gemini-text").innerText = "Login and valid course required.";
+        aiText.innerText = "Login and valid course required.";
         return;
       }
 
       try {
         const res = await fetch(`${API_BASE}/api/course-recommendation?course=${course}&userId=${userId}`);
         const data = await res.json();
-
-        if (data.recommendation) {
-          document.getElementById("gemini-text").innerText = data.recommendation;
-        } else {
-          document.getElementById("gemini-text").innerText = "No AI recommendation found.";
-        }
+        aiText.innerText = data.recommendation || "No AI suggestion found.";
       } catch (err) {
-        console.error("Gemini fetch error:", err);
-        document.getElementById("gemini-text").innerText = "Error loading AI suggestion.";
+        console.error("AI fetch error:", err);
+        aiText.innerText = "Error loading AI suggestion.";
       }
     });
   </script>

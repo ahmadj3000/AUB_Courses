@@ -9,6 +9,9 @@ const path = require("path");
 const multer = require("multer");
 const fs = require("fs");
 
+const { OpenAI } = require("openai");           // ← NEW
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });  // ← NEW
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || "dev_secret";
@@ -18,16 +21,15 @@ app.use(cookieParser());
 
 const MONGO_URI = process.env.MONGO_URI;
 
+// Configure Brevo (Sendinblue)
 const Sib = require('sib-api-v3-sdk');
-
-
 const client = Sib.ApiClient.instance;
 const apiKey = client.authentications['api-key'];
 apiKey.apiKey = process.env.BREVO_API_KEY;
 
 const brevoEmail = new Sib.TransactionalEmailsApi();
 
-
+//cors setup
 const allowedOrigins = [
   "http://localhost:5501",
   "http://127.0.0.1:5501",
@@ -83,9 +85,9 @@ app.post("/register", async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
 // Log to verify JWT_SECRET is defined
-console.log("JWT_SECRET:", JWT_SECRET);
+    console.log("JWT_SECRET:", JWT_SECRET);
 
-const verificationToken = jwt.sign({ email }, JWT_SECRET, { expiresIn: "1d" });
+    const verificationToken = jwt.sign({ email }, JWT_SECRET, { expiresIn: "1d" });
 
     const newUser = new User({
       username,
@@ -247,7 +249,7 @@ app.get("/api/courses", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch courses" });
   }
 });
-
+//file download
 app.get("/api/materials/download/:filename", (req, res) => {
   const filename = req.params.filename;
   const filePath = path.join(__dirname, "uploads", filename);
@@ -376,7 +378,7 @@ app.get(/^\/(?!api).*/, (req, res) => {
   res.sendFile(path.join(__dirname, "Home_Page", "home.html"));
 });
 
-// ✅ Import and initialize Gemini
+/*/ ✅ Import and initialize Gemini
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
@@ -422,6 +424,40 @@ app.get("/api/course-recommendation", async (req, res) => {
     // Handle errors (e.g. if Gemini fails or something else breaks)
     console.error("❌ Gemini error:", err);
     res.status(500).json({ error: "Gemini generation failed" });
+  }
+});*/
+
+// OpenAI-backed recommendation endpoint
+app.get("/api/course-recommendation", async (req, res) => {
+  try {
+    const { course, userId } = req.query;
+    if (!course || !userId)
+      return res.status(400).json({ error: "Missing course or userId" });
+
+    const user = await User.findById(userId);
+    const courseData = await Course.findOne({ id: course.toLowerCase() });
+    if (!user || !courseData)
+      return res.status(404).json({ error: "User or course not found" });
+
+    const major = user.major || "Undeclared";
+    const title = courseData.title || courseData.code;
+    const description = courseData.description || "No description available.";
+
+    const prompt = `
+A student majoring in ${major} is considering the course "${title}". 
+Course description: "${description}".
+Should the student take this course? What background or interests would help them the most?
+`.trim();
+
+    const chat = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [{ role: "user", content: prompt }],
+    });
+    const recommendation = chat.choices[0].message.content.trim();
+    res.json({ recommendation });
+  } catch (err) {
+    console.error("❌ OpenAI error:", err);
+    res.status(500).json({ error: "AI generation failed" });
   }
 });
 
