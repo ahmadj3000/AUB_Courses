@@ -298,36 +298,9 @@
       const params = new URLSearchParams(window.location.search);
       //const course = params.get("course");
       //const userId = localStorage.getItem("userId");
-      //const course = "cmps201"
-      //const userId = "68012729901ee8b432674e8e"; // Replace this with any valid userId for testing
-      
-      const course = new URLSearchParams(window.location.search).get("course");
+      const course = "cmps201"
+      const userId = "68012729901ee8b432674e8e"; // Replace this with any valid userId for testing
       const aiText = document.getElementById("ai-text");
-      
-      if (!course) {
-        aiText.innerText = "Missing course.";
-        return;
-      }
-      
-      try {
-        const userRes = await fetch(`${API_BASE}/api/user/me`, {
-          credentials: "include",
-        });
-        const user = await userRes.json();
-      
-        const userId = user._id || user.userId;
-        if (!userId) throw new Error("User not logged in");
-      
-        const res = await fetch(`${API_BASE}/api/course-recommendation?course=${course}&userId=${userId}`);
-        const data = await res.json();
-        aiText.innerText = data.recommendation || "No AI suggestion found.";
-      } catch (err) {
-        console.error("AI fetch error:", err);
-        aiText.innerText = "Error loading AI suggestion.";
-      }
-      
-
-     // const aiText = document.getElementById("ai-text");
 
       if (!course || !userId) {
         aiText.innerText = "Login and valid course required.";
