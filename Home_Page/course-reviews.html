@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,8 +25,6 @@
           <button class="logout-button" onclick="logoutUser()">Sign Out</button>
         </div>
       </div>
-      
-
     </div>
   </header>
 
@@ -43,24 +40,15 @@
         <span id="course-title">Loading course...</span>
       </h1>
       <div class="course-meta" id="course-meta">
-        <div id="ai-suggestion" style="
-          background-color: #1e1e2f;
-          padding: 1rem;
-          border-radius: 8px;
-          border: 1px solid #444;
-          color: #ddd;
-          margin-top: 1rem;
-          max-width: 400px;
-          float: right;
-        ">
-          <h3 style="margin-top: 0;">AI Suggestion</h3>
+
+        <!-- AI Suggestion Section (Above Rating Block) -->
+        <div class="ai-suggestion">
+          <h3>AI Suggestion</h3>
           <p id="ai-text">Loading recommendation...</p>
         </div>
-      
+
         <p>Loading course info...</p>
       </div>
-      
-
 
     <!-- Course Navigation -->
     <div class="course-nav">
@@ -142,7 +130,6 @@
               <span id="count-1">0</span>
             </div>
           </div>
-          
         </div>        
         
         <div class="rating-categories">
@@ -286,7 +273,6 @@
       : "https://aub-courses-qhnx.onrender.com"; // 🔁 Replace with your actual Render backend URL
   </script>
   
-
   <script>
     // Review form submission
     document.getElementById('review-form').addEventListener('submit', function(e) {
@@ -306,243 +292,7 @@
       });
     });
   </script>
-  <script>
-
-    function getCourseFromURL() {
-      const params = new URLSearchParams(window.location.search);
-      return params.get("course");
-    }
-
-  </script>
-  <script>
-    async function fetchCourse(courseId) {
-      try {
-        const res = await fetch(`${API_BASE}/api/courses`);
-        const courses = await res.json();
-        return courses.find(c => c.id.toLowerCase() === courseId?.toLowerCase());
-      } catch (err) {
-        console.error("❌ Failed to load course data:", err);
-        return null;
-      }
-    }
-
-    async function updateCourseHeader() {
-      const course = await fetchCourse(courseId);
-      if (!course) return;
-
-      document.querySelectorAll(".course-code").forEach(el => {
-        el.textContent = course.code;
-      });
-
-      const h1 = document.querySelector(".course-header h1");
-      if (h1) {
-        h1.innerHTML = `<span class="course-code">${course.code}:</span> ${course.title}`;
-      }
-
-      const meta = document.querySelector(".course-meta");
-      if (meta) {
-        meta.innerHTML = `
-          <span class="department">${course.department}</span> • 
-          <span class="credits">${course.credits} credit${course.credits === 1 ? "" : "s"}</span> • 
-          <span class="rating"> </span>
-        `;
-      }
-      try {
-        const res = await fetch(`${API_BASE}/api/reviews/${courseId}`);
-        const reviews = await res.json();
-
-        const count = reviews.length;
-        const total = reviews.reduce((sum, r) => sum + (r.rating || 0), 0);
-        const avg = count ? (total / count).toFixed(1) : "N/A";
-
-        const ratingEl = document.querySelector(".course-meta .rating");
-        if (ratingEl) ratingEl.textContent = avg !== "N/A" ? `★ ${avg}` : "★ -";
-      } catch (err) {
-        console.error("Failed to load rating:", err);
-      }
-    }
-
-    updateCourseHeader();
-    const currentPage = window.location.pathname.split("/").pop(); // e.g. 'course-reviews.html'
-
-    if (currentPage.includes("materials")) {
-      document.getElementById("nav-materials")?.classList.add("active");
-    } else if (currentPage.includes("reviews")) {
-      document.getElementById("nav-reviews")?.classList.add("active");
-    } else if (currentPage.includes("forum")) {
-      document.getElementById("nav-forum")?.classList.add("active");
-    }
-
-    document.getElementById("review-form").addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const courseId = new URLSearchParams(window.location.search).get("course");
-      const title = document.getElementById("review-title").value.trim();
-      const rating = parseInt(document.querySelector('input[name="rating"]:checked')?.value);
-      const text = document.getElementById("review-text").value.trim();
-      const contentRating = parseInt(document.querySelector('input[name="content-rating"]:checked')?.value) || 0;
-      const difficultyRating = parseInt(document.querySelector('input[name="difficulty-rating"]:checked')?.value) || 0;
-      const workloadRating = parseInt(document.querySelector('input[name="workload-rating"]:checked')?.value) || 0;
-      const professorRating = parseInt(document.querySelector('input[name="professor-rating"]:checked')?.value) || 0;
-
-
-      if (!rating || !text) {
-        alert("Please fill in all fields.");
-        return;
-      }
-
-      try {
-        const res = await fetch(`${API_BASE}/api/reviews`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ courseId, title, rating, text, contentRating, difficultyRating, workloadRating, professorRating })
-        });
-
-        const data = await res.json();
-
-        if (res.ok) {
-          alert("✅ Review submitted!");
-          document.getElementById("review-form").reset();
-          loadReviews();
-        } else {
-          alert("❌ " + data.error);
-        }
-      } catch (err) {
-        console.error("Error submitting review:", err);
-        alert("Server error while submitting review.");
-      }
-    });
-
-    async function loadReviews() {
-      const courseId = new URLSearchParams(window.location.search).get("course");
-      const container = document.getElementById("reviews-list");
-
-      if (!courseId || !container) return;
-
-      try {
-        const res = await fetch(`${API_BASE}/api/reviews/${courseId}`);
-        const reviews = await res.json();
-
-        if (!Array.isArray(reviews)) throw new Error("Invalid data");
-
-        let totalRating = 0, counts = [0, 0, 0, 0, 0];
-        let sumContent = 0, sumDifficulty = 0, sumWorkload = 0, sumProfessor = 0;
-
-        reviews.forEach(r => {
-          const rating = r.rating || 0;
-          totalRating += rating;
-          if (rating >= 1 && rating <= 5) counts[rating - 1]++;
-          sumContent += r.contentRating || 0;
-          sumDifficulty += r.difficultyRating || 0;
-          sumWorkload += r.workloadRating || 0;
-          sumProfessor += r.professorRating || 0;
-        });
-
-        const count = reviews.length;
-        const avg = (totalRating / count).toFixed(1);
-        document.getElementById("average-rating").textContent = avg;
-        document.getElementById("rating-count").textContent = `Based on ${count} review${count !== 1 ? "s" : ""}`;
-
-        for (let i = 5; i >= 1; i--) {
-          const num = counts[i - 1];
-          document.getElementById(`count-${i}`).textContent = num;
-          const bar = document.getElementById(`bar-${i}`);
-          if (bar) bar.style.width = `${(num / count) * 100}%`;
-        }
-
-        // Set category averages
-        function setStars(id, avg) {
-          const rounded = Math.round(avg);
-          document.getElementById(id).textContent = "★".repeat(rounded) + "☆".repeat(5 - rounded);
-        }
-
-        const avgContent = (sumContent / count).toFixed(1);
-        const avgDiff = (sumDifficulty / count).toFixed(1);
-        const avgWork = (sumWorkload / count).toFixed(1);
-        const avgProf = (sumProfessor / count).toFixed(1);
-
-        document.getElementById("avg-content").textContent = avgContent;
-        document.getElementById("avg-difficulty").textContent = avgDiff;
-        document.getElementById("avg-workload").textContent = avgWork;
-        document.getElementById("avg-professor").textContent = avgProf;
-
-        setStars("stars-content", avgContent);
-        setStars("stars-difficulty", avgDiff);
-        setStars("stars-workload", avgWork);
-        setStars("stars-professor", avgProf);
-        setStars("overall-stars", avg);
-
-        // ✅ Now assign the reviews to the container
-        container.innerHTML = reviews.length
-          ? reviews.map(r => {
-              const stars = "★".repeat(r.rating) + "☆".repeat(5 - r.rating);
-              const initials = (r.author || "Anonymous").split(" ").map(w => w[0]).join("").toUpperCase();
-
-              return `
-                <div class="review-card">
-                  <div class="review-header">
-                    <div class="reviewer-info">
-                      <div class="avatar">${initials}</div>
-                      <div>
-                        <h4>${r.author || "Anonymous"}</h4>
-                        <span class="review-date">${new Date(r.date).toLocaleDateString()}</span>
-                      </div>
-                    </div>
-                    <div class="review-rating">
-                      <div class="stars">${stars}</div>
-                      <span>${r.rating.toFixed(1)}</span>
-                    </div>
-                  </div>
-                  <h3 class="review-title">${r.title || "Untitled Review"}</h3>
-                  <p class="review-text">${r.text}</p>
-                  <div class="review-categories">
-                    <div class="mini-category"><span>Content: ${r.contentRating || "-" }★</span></div>
-                    <div class="mini-category"><span>Difficulty: ${r.difficultyRating || "-" }★</span></div>
-                    <div class="mini-category"><span>Workload: ${r.workloadRating || "-" }★</span></div>
-                    <div class="mini-category"><span>Professor: ${r.professorRating || "-" }★</span></div>
-                  </div>
-                  <div class="review-actions">
-                    <button class="helpful-button" data-id="${r._id}">Helpful (${r.helpfulCount || 0})</button>
-                    <button class="report-button">Report</button>
-                  </div>
-                </div>
-              `;
-            }).join('')
-          : `<p>No reviews yet for this course.</p>`;
-
-      } catch (err) {
-        console.error("Failed to load reviews:", err);
-        container.innerHTML = `<p>Failed to load reviews.</p>`;
-      }
-    }
-    loadReviews();
-    document.addEventListener("click", async (e) => {
-      if (e.target.classList.contains("helpful-button")) {
-        const reviewId = e.target.dataset.id;
-        if (!reviewId) return;
-
-        try {
-          const res = await fetch(`${API_BASE}/api/reviews/${reviewId}/helpful`, {
-            method: "PATCH"
-          });
-
-          const data = await res.json();
-
-          if (res.ok) {
-            e.target.textContent = `Helpful (${data.helpfulCount})`;
-          } else {
-            alert("Failed to update helpful count.");
-          }
-        } catch (err) {
-          console.error("Helpful vote error:", err);
-          alert("Server error while updating helpful count.");
-        }
-      }
-    });
-
-  </script>
-
-
+  
   <script>
     document.addEventListener("DOMContentLoaded", async () => {
       const params = new URLSearchParams(window.location.search);
