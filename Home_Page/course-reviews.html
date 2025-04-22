@@ -546,8 +546,10 @@
   <script>
     document.addEventListener("DOMContentLoaded", async () => {
       const params = new URLSearchParams(window.location.search);
-      const course = params.get("course");
-      const userId = localStorage.getItem("userId");
+      //const course = params.get("course");
+      //const userId = localStorage.getItem("userId");
+      const course = "67ee4cc0db2f3f8d6adc6949"
+      const userId = "68012729901ee8b432674e8e"; // Replace this with any valid userId for testing
       const aiText = document.getElementById("ai-text");
 
       if (!course || !userId) {
