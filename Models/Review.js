@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const ReviewSchema = new mongoose.Schema({
   courseId: String,
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   rating: Number,
   title: String,
   text: String,
