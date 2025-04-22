@@ -443,10 +443,14 @@ app.get("/api/course-recommendation", async (req, res) => {
     const title = courseData.title || courseData.code;
     const description = courseData.description || "No description available.";
 
-    const prompt = `
-A student majoring in ${major} is considering the course "${title}". 
-Course description: "${description}".
-Should the student take this course? What background or interests would help them the most?
+    const prompt = ` 
+     A student majoring in ${major} is considering taking the course titled "${title}".
+     The course is described as: "${description}".
+     Based on this information,as brief as possible  in less than 150 words should the student enroll in this course?
+     Provide a concise recommendation considering factors such as the
+      student's academic major, interests, and potential challenges.
+       What prior knowledge or skills would best prepare the student for 
+       success in this course?"
 `.trim();
 
     const chat = await openai.chat.completions.create({
