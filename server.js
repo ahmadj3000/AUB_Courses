@@ -447,7 +447,7 @@ app.get("/api/course-recommendation", async (req, res) => {
      A student majoring in ${major} is considering taking the course titled "${title}".
      The course is described as: "${description}".
      Based on this information,as brief as possible  in less than 150 words should the student enroll in this course?
-     Provide a concise recommendation considering factors such as the
+     Provide a direct, first-person response to the student, addressing them personally. For example, say 'Yes, you should take this course because...' a concise recommendation considering factors such as the
       student's academic major, interests, and potential challenges.
        What prior knowledge or skills would best prepare the student for 
        success in this course?"
@@ -456,6 +456,7 @@ app.get("/api/course-recommendation", async (req, res) => {
     const chat = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [{ role: "user", content: prompt }],
+      max_tokens: 300, // Limit token count to reduce the word count
     });
     const recommendation = chat.choices[0].message.content.trim();
     res.json({ recommendation });
