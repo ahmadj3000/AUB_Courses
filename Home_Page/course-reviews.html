@@ -294,32 +294,13 @@
   </script>
   
   <script>
-    const API_BASE = "http://localhost:3000";
     document.addEventListener("DOMContentLoaded", async () => {
-     // const params = new URLSearchParams(window.location.search);
-      //const course = params.get("course", course);
-     // const userId = localStorage.getItem("userId", user._id);
-
-     app.get("/api/current-user-course", async (req, res) => {
-      const userId = req.session?.userId || req.user?.id;
-      const course = req.session?.course || req.query.course;
-    
-      if (!userId || !course) {
-        return res.status(400).json({ error: "Missing user or course" });
-      }
-    
-      res.json({ userId, course });
-    });
-      
-
-
+      const params = new URLSearchParams(window.location.search);
+      const course = params.get("course", course);
+      const userId = localStorage.getItem("userId", user._id);
       //const course = "cmps201"
       //const userId = "68012729901ee8b432674e8e"; // Replace this with any valid userId for testing
       const aiText = document.getElementById("ai-text");
-
-      console.log("Course from URL:", course);
-      console.log("User ID from localStorage:", userId);
-
 
       if (!course || !userId) {
         aiText.innerText = "Login and valid course required.";
