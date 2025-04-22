@@ -318,38 +318,6 @@
     });
   </script>
 
-<script>
-  document.addEventListener("DOMContentLoaded", async () => {
-    const courseId = new URLSearchParams(window.location.search).get("course");
-    const userId = localStorage.getItem("userId");
-  
-    const reviewsList = document.getElementById("reviews-list");
-    const reviewForm = document.querySelector(".write-review");
-  
-    try {
-      const res = await fetch(`${API_BASE}/api/reviews/${courseId}`);
-      const reviews = await res.json();
-  
-      const alreadyReviewed = reviews.some(r => r.userId?._id === userId);
-      if (alreadyReviewed) reviewForm.style.display = "none";
-  
-      reviews.forEach(review => {
-        const el = document.createElement("div");
-        el.classList.add("review-box");
-        el.innerHTML = `
-          <h4>${review.title}</h4>
-          <p>${review.text}</p>
-          <p><strong>Posted by:</strong> ${review.userId?.username || "Anonymous"}</p>
-        `;
-        reviewsList.appendChild(el);
-      });
-    } catch (err) {
-      console.error("Error loading reviews", err);
-    }
-  });
-  </script>
-  
-
   <script src="header-user-panel.js"></script>
 
 </body>

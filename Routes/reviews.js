@@ -4,40 +4,14 @@ const Review = require("../Models/Review");
 
 // POST a new review
 router.post("/", async (req, res) => {
-  const {
-    courseId,
-    userId,
-    title,
-    rating,
-    text,
-    contentRating,
-    difficultyRating,
-    workloadRating,
-    professorRating
-  } = req.body;
+  const { courseId, title, rating, text, author = "Anonymous", contentRating, difficultyRating, workloadRating, professorRating } = req.body;
 
-  if (!courseId || !userId || !rating || !text) {
+  if (!courseId || !rating || !text) {
     return res.status(400).json({ error: "All fields are required." });
   }
 
   try {
-    const existing = await Review.findOne({ courseId, userId });
-    if (existing) {
-      return res.status(400).json({ error: "You've already submitted a review for this course." });
-    }
-
-    const newReview = new Review({
-      courseId,
-      userId,
-      title,
-      rating,
-      text,
-      contentRating,
-      difficultyRating,
-      workloadRating,
-      professorRating
-    });
-
+    const newReview = new Review({ courseId, title, rating, text, author, contentRating, difficultyRating, workloadRating, professorRating});
     const saved = await newReview.save();
     res.status(201).json(saved);
   } catch (err) {
@@ -49,10 +23,7 @@ router.post("/", async (req, res) => {
 // GET all reviews for a specific course
 router.get("/:courseId", async (req, res) => {
   try {
-    const reviews = await Review.find({ courseId: req.params.courseId })
-      .populate("userId", "username")
-      .sort({ date: -1 });
-
+    const reviews = await Review.find({ courseId: req.params.courseId }).sort({ date: -1 });
     res.json(reviews);
   } catch (err) {
     console.error("Error fetching reviews:", err);
