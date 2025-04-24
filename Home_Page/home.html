@@ -1,41 +1,293 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aubreviews - Home</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AUB Reviews - Find Courses, Access Materials, Read Reviews</title>
+    <meta name="description" content="AUB Reviews - The ultimate platform for American University of Beirut students to find courses, access materials, read reviews, and join discussions." />
+    <meta name="author" content="AUB Reviews" />
     <link rel="stylesheet" href="home.css">
-</head>
-<body>
+    
+  </head>
 
-    <nav>
-        <button class="dropdown-btn">☰ Menu</button>
-        <div class="dropdown-content">
-            <a href="../Material_Page/MP.html">Materials</a>
-            <a href="https://piazza.com">Piazza</a>
-            <a href="comments.html" class="big-button">Comment Section</a> <!-- New Button -->
-        </div>
+  <body>
+    <div id="root">
+      <!-- Header -->
+      <header class="header">
+        <div class="container header-container">
+          <div class="logo">
+            <span class="logo-aub">AUB</span>
+            <span class="logo-reviews">REVIEWS</span>
+          </div>
 
-        <!-- Profile Button -->
-        <div class="profile-menu">
-            <button class="profile-btn">👤 Profile</button>
-            <div class="profile-dropdown">
-                <a href="#" id="logout">Log Out</a>
+          <!-- Profile Circle: hidden by default, shown only if logged in -->
+          <div class="user-header-container">
+            <div id="profile-circle" class="profile-circle hidden" onclick="toggleUserPanel()">U</div>
+          
+            <div id="user-panel" class="user-panel hidden">
+              <p class="info-line"><strong>Username:</strong> <span id="panel-username"></span></p>
+              <p class="info-line"><strong>Email:</strong> <span id="panel-email"></span></p>
+              <button class="logout-button" onclick="logoutUser()">Logout</button>
             </div>
-        </div>
-    </nav>
+          </div>
+      </header>
 
-    <div class="container">
-        <h1>Welcome to AubReviews</h1>
-        <p>AubReviews is your go-to platform for reviewing courses, accessing past notes, sharing insights from students and professors, and exploring essential learning materials.</p>
-        
-        <div class="buttons">
-            <a href="../Material_Page/MP.html" class="big-button">Go to Materials</a>
-            <a href="../Forum_Page/index.html" class="big-button">Go to Piazza</a>
-            <a href="../Comments_page/comments.html" class="big-button">Comment Section</a> 
+      <!-- Hero Section with Search -->
+      <section class="hero">
+        <div class="container">
+          <div class="hero-content">
+            <h1>Find Your AUB Courses</h1>
+            <p>Search for courses, access materials, read reviews, and join discussions.</p>
+            <form class="search-form" onsubmit="return handleSearch(event)">
+              <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search courses (e.g. CMPS 200, Biology 101...)" id="search-input">
+                <button type="submit" class="search-button">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
+      </section>
+
+      <!-- Courses Section -->
+      <section class="courses">
+        <div class="container">
+          <div class="courses-header">
+            <div>
+              <h2>Available Courses</h2>
+              <p class="course-count">0 courses available</p>
+            </div>
+            <div>
+              <button class="filter-button" onclick="toggleFilters()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+                Filter
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Filters -->
+          <div class="filters" id="filters-container">
+            <h3>Filter by Department</h3>
+            <div class="filter-buttons">
+              <button class="dept-button active" onclick="filterByDepartment(null)">All</button>
+              <button class="dept-button" onclick="filterByDepartment('Computer Science')">Computer Science</button>
+              <button class="dept-button" onclick="filterByDepartment('Biology')">Biology</button>
+              <button class="dept-button" onclick="filterByDepartment('Mathematics')">Mathematics</button>
+              <button class="dept-button" onclick="filterByDepartment('Chemistry')">Chemistry</button>
+              <button class="dept-button" onclick="filterByDepartment('Economics')">Economics</button>
+            </div>
+          </div>
+
+          <!-- Course Grid -->
+          <div class="course-grid" id="course-grid">
+          </div>
+          
+          <!-- No courses found message -->
+          <div class="no-courses" id="no-courses" style="display: none;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+            <h3>No courses found</h3>
+            <p>Try adjusting your search or filters</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <div class="container">
+          <div class="footer-top">
+            <div class="logo">
+              <span class="logo-aub">AUB</span>
+              <span class="logo-reviews">REVIEWS</span>
+            </div>
+            <div class="footer-links">
+              <a href="#" class="footer-link">About</a>
+              <a href="#" class="footer-link">Terms of Service</a>
+              <a href="#" class="footer-link">Privacy Policy</a>
+              <a href="#" class="footer-link">Contact</a>
+              <a href="/Home_Page/admin.html" class="footer-link">Admin</a>
+            </div>
+          </div>
+          <hr class="separator">
+          <div class="copyright">
+            © <span id="current-year"></span> AUB Reviews. All rights reserved.
+          </div>
+        </div>
+      </footer>
     </div>
 
-    <script src="home.js"></script>
-</body>
+    <script>
+      const API_BASE = window.location.hostname.includes("localhost")
+        ? "http://localhost:3000"
+        : "https://aub-courses-qhnx.onrender.com"; // 🔁 Replace with your actual Render backend URL
+    </script>
+    
+
+    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
+    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
+    <script>
+      let allCourses = [];
+      let filteredCourses = [];
+      let selectedDepartment = null;
+    
+      const courseGrid = document.getElementById("course-grid");
+      const noCoursesMsg = document.getElementById("no-courses");
+    
+      async function fetchCourses() {
+        try {
+          const res = await fetch(`${API_BASE}/api/courses`);
+          const data = await res.json();
+          allCourses = Array.isArray(data) ? data : [];
+          filteredCourses = [...allCourses]; // Initialize
+          renderCourses(filteredCourses);
+        } catch (err) {
+          console.error("Failed to fetch courses:", err);
+          renderCourses([]);
+        }
+      }
+    
+      function toggleFilters() {
+        const filters = document.getElementById('filters-container');
+        filters.style.display = filters.style.display === 'none' ? 'block' : 'none';
+      }
+    
+      function filterByDepartment(department) {
+        selectedDepartment = department;
+    
+        document.querySelectorAll('.dept-button').forEach(btn => {
+          btn.classList.remove('active');
+          if ((department === null && btn.textContent === 'All') ||
+              (btn.textContent === department)) {
+            btn.classList.add('active');
+          }
+        });
+    
+        filteredCourses = (department === null)
+          ? [...allCourses]
+          : allCourses.filter(course => course.department === department);
+    
+        renderCourses(filteredCourses);
+      }
+    
+      function handleSearch(event) {
+        event.preventDefault();
+        const query = document.getElementById('search-input').value.trim().toLowerCase();
+    
+        filteredCourses = allCourses.filter(course => {
+          const matchesQuery =
+            course.code?.toLowerCase().includes(query) ||
+            course.title?.toLowerCase().includes(query);
+    
+          return selectedDepartment
+            ? matchesQuery && course.department === selectedDepartment
+            : matchesQuery;
+        });
+    
+        renderCourses(filteredCourses);
+        return false;
+      }
+    
+      function renderCourses(courses) {
+        courseGrid.innerHTML = '';
+    
+        if (!Array.isArray(courses)) {
+          console.error("renderCourses received invalid data:", courses);
+          noCoursesMsg.style.display = 'flex';
+          document.querySelector('.course-count').textContent = '0 courses available';
+          return;
+        }
+    
+        if (courses.length === 0) {
+          noCoursesMsg.style.display = 'flex';
+          document.querySelector('.course-count').textContent = '0 courses available';
+          return;
+        }
+    
+        noCoursesMsg.style.display = 'none';
+        document.querySelector('.course-count').textContent =
+          `${courses.length} ${courses.length === 1 ? 'course' : 'courses'} available`;
+    
+        courses.forEach(course => {
+          const {
+            code = "Unknown Code",
+            title = "Untitled Course",
+            department = "Unknown Department",
+            credits = 0,
+            rating = "N/A",
+            professors = [],
+            description = "",
+            id = ""
+          } = course;
+    
+          const card = document.createElement('div');
+          card.className = 'course-card';
+          card.innerHTML = `
+            <div class="card-header">
+              <h3>${code}</h3>
+              <span class="rating" data-course-id="${id}">
+                <span class="course-rating">★ ${rating}</span>
+              </span>
+            </div>
+            <h4 class="course-name">${title}</h4>
+            <p class="department">${department} | ${credits} Credit${credits !== 1 ? 's' : ''}</p>
+            <p class="description">${description}</p>
+            <div class="professors">
+              <strong>Professors:</strong> ${professors.length > 0 ? professors.join(', ') : 'N/A'}
+            </div>
+            <div class="card-buttons">
+              <a href="course-materials.html?course=${id}" class="card-button material-button">Materials</a>
+              <a href="course-reviews.html?course=${id}" class="card-button review-button">Review</a>
+              <a href="course-forum.html?course=${id}" class="card-button forum-button">Forum</a>
+            </div>
+          `;
+          courseGrid.appendChild(card);
+          updateRatingsFromReviews();
+        });
+      }
+      async function updateRatingsFromReviews() {
+        const ratingSpans = document.querySelectorAll(".rating[data-course-id]");
+
+        ratingSpans.forEach(async span => {
+          const courseId = span.getAttribute("data-course-id");
+          try {
+            const res = await fetch(`${API_BASE}/api/reviews/${courseId}`);
+            const reviews = await res.json();
+
+            const total = reviews.reduce((sum, r) => sum + (r.rating || 0), 0);
+            const avg = reviews.length ? (total / reviews.length).toFixed(1) : "N/A";
+
+            const ratingDisplay = span.querySelector(".course-rating");
+            if (ratingDisplay) ratingDisplay.textContent = `★ ${avg}`;
+          } catch (err) {
+            console.error(`Error fetching rating for ${courseId}`, err);
+          }
+        });
+      }
+
+      fetchCourses();
+      document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
+
+    <script src="header-user-panel.js"></script>
+
+  </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
