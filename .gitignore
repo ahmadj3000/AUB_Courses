@@ -4,8 +4,3 @@ node_modules/
 npm-debug.log
 *.log
 .DS_Store
-
-
-    PORT=3000
-    MONGO_URI=mongodb+srv://mak:Arsenal82@cluster0aubcourses.vmg1x.mongodb.net/DataBase?retryWrites=true&w=majority&appName=Cluster0AubCourses
-    JWT_SECRET=cdac424aadbc0af8cde415c102ee0db9aad024f8889a533649b3e94a87d1dd5ee419076bf62183d84162b1175aec9135a4695ae54c6971346356b142ea25d016

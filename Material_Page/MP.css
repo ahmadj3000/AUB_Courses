@@ -1,0 +1,205 @@
+@import url('https://fonts.googleleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+/* Basic white and blue color scheme for the page */
+body {
+    background: linear-gradient(90deg,#e2e2e2, #c9d6ff);
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+  }
+  
+  /* Taskbar styles */
+  .taskbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #7494ec;  /* Blue background */
+    padding: 10px 50px;
+    color: #fff;
+    height: 30px; /* Increase vertical size; adjust as needed */
+  }
+  
+  /* Enlarge the icons within the taskbar */
+  .taskbar i {
+    font-size: 25px; /* Increase icon size; adjust as needed */
+  }
+  
+  .taskbar-left, .taskbar-right {
+    display: flex;
+    align-items: center;
+  }
+  
+  .home-btn {
+    color: #fff; /* for normal links */
+    text-decoration: none;
+  }
+  
+  .home-btn:visited {
+    color: #fff; /* override purple visited color */
+  }
+  
+  /* Profile container with dropdown */
+  .profile-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .profile-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  /* Dropdown initially hidden */
+  .profile-dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #fff;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    z-index: 1;
+  }
+  
+  .profile-dropdown button {
+    background: none;
+    border: none;
+    color: #7494ec;
+    padding: 10px 20px;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .profile-dropdown button:hover {
+    background-color: #f1f1f1;
+  }
+  
+  /* Container for the main content */
+  .container {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    
+  }
+  
+  /* Header (Course Finder and search) */
+  header {
+    background-color: #7494ec;
+    padding: 20px;
+    text-align: center;
+    color: #fff;
+    border-radius: 5px;
+  }
+  
+  .search-form input[type="text"] {
+    width: 70%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px 0 0 5px;
+    font-size: 16px;
+    box-shadow: 0 010px rgba(0, 0, 0, .1);
+  }
+  
+  .search-form button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 0 5px 5px 0;
+    background-color: #fff;
+    color: #007BFF;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 16px;
+    box-shadow: 0 010px rgba(0, 0, 0, .1);
+  }
+  
+  /* Main course content area */
+  #course-content {
+    margin: 20px 0;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+  }
+  
+  /* Make the course heading less bold */
+  .course-heading {
+    font-weight: 400;
+  }
+  
+  /* Styles for individual document entries */
+  .document {
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  
+  .placeholder {
+    color: #999;
+    font-style: italic;
+  }
+  
+  /* Upload button fixed at the bottom-right */
+  .upload-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #007BFF;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .course-heading {
+    text-decoration: underline;
+    color:#999;
+}
+
+.profile-container:hover .profile-dropdown {
+    display: block;
+  }
+
+  .doc-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columns */
+    gap: 20px;
+    margin-top: 20px;
+  }
+  
+  /* Each document card */
+  .doc-card {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    padding: 10px;
+  }
+  
+  /* Image styling */
+  .doc-image {
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+  }
+  
+  /* Placeholder card styling */
+  .doc-card.placeholder .doc-image-placeholder {
+    width: 100%;
+    height: 120px;
+    background-color: #eee;
+    border: 2px dashed #ccc;
+    margin-bottom: 10px;
+  }
+  
+  /* Title styling for document cards */
+  .doc-title {
+    font-weight: 600;
+    margin-top: 5px;
+  }

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comments Section</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="comments-container">
+        <h1>Course: CMPS271 Software Engineering</h1>
+        
+        <ul id="comments-list" class="comments-list">
+            <!-- First comment -->
+            <li class="comment-item">
+                <div class="comment-avatar"><img src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png" alt="User Avatar"></div>
+                <div class="comment-content">
+                    <div class="comment-head">
+                        <span class="comment-author">Student A</span>
+                        <button class="reply-btn">Reply</button>
+                        <button class="thumb-up-btn">👍 <span class="thumbs-up-count">2</span></button>
+                        <button class="thumb-down-btn">👎 <span class="thumbs-down-count">1</span></button>
+                    </div>
+                    Really enjoyed the hands-on projects in this course!
+                    <div class="reply-form-container" style="display:none;">
+                        <textarea class="reply-input"></textarea>
+                        <button class="send-reply-btn">Send</button>
+                    </div>
+                    <ul class="replies-list">
+                        <li>Yes, those projects were great for learning! - Student B</li>
+                    </ul>
+                </div>
+            </li>
+
+            <!-- Second comment -->
+            <li class="comment-item">
+                <div class="comment-avatar"><img src="https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_960_720.png" alt="User Avatar"></div>
+                <div class="comment-content">
+                    <div class="comment-head">
+                        <span class="comment-author">Student C</span>
+                        <button class="reply-btn">Reply</button>
+                        <button class="thumb-up-btn">👍 <span class="thumbs-up-count">3</span></button>
+                        <button class="thumb-down-btn">👎 <span class="thumbs-down-count">0</span></button>
+                    </div>
+                    Found the final exam to be quite challenging.
+                    <div class="reply-form-container" style="display:none;">
+                        <textarea class="reply-input"></textarea>
+                        <button class="send-reply-btn">Send</button>
+                    </div>
+                    <ul class="replies-list">
+                        <li>It definitely tested our knowledge thoroughly. - Student D</li>
+                    </ul>
+                </div>
+            </li>
+
+            <!-- Third comment -->
+            <li class="comment-item">
+                <div class="comment-avatar"><img src="https://cdn.pixabay.com/photo/2021/08/25/07/57/woman-6577531_960_720.png" alt="User Avatar"></div>
+                <div class="comment-content">
+                    <div class="comment-head">
+                        <span class="comment-author">Student E</span>
+                        <button class="reply-btn">Reply</button>
+                        <button class="thumb-up-btn">👍 <span class="thumbs-up-count">5</span></button>
+                        <button class="thumb-down-btn">👎 <span class="thumbs-down-count">0</span></button>
+                    </div>
+                    Lectures were informative and engaging.
+                    <div class="reply-form-container" style="display:none;">
+                        <textarea class="reply-input"></textarea>
+                        <button class="send-reply-btn">Send</button>
+                    </div>
+                    <ul class="replies-list">
+                        <li>Loved the interactive elements! - Student F</li>
+                    </ul>
+                </div>
+            </li>
+
+            <!-- Fourth comment -->
+            <li class="comment-item">
+                <div class="comment-avatar"><img src="https://cdn.pixabay.com/photo/2016/03/31/19/57/avatar-1295404_960_720.png" alt="User Avatar"></div>
+                <div class="comment-content">
+                    <div class="comment-head">
+                        <span class="comment-author">Student G</span>
+                        <button class="reply-btn">Reply</button>
+                        <button class="thumb-up-btn">👍 <span class="thumbs-up-count">4</span></button>
+                        <button class="thumb-down-btn">👎 <span class="thumbs-down-count">1</span></button>
+                    </div>
+                    Would love more guest speakers from the industry.
+                    <div class="reply-form-container" style="display:none;">
+                        <textarea class="reply-input"></textarea>
+                        <button class="send-reply-btn">Send</button>
+                    </div>
+                    <ul class="replies-list">
+                        <li>That would be really beneficial for networking. - Student H</li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+
+        <div class="comment-form-container">
+            <form id="comment-form" class="comment-form">
+                <textarea id="comment-input" class="comment-input" placeholder="Add a comment..." required></textarea>
+                <button type="submit" class="submit-btn">Post Comment</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="comments.js"></script>
+</body>
+</html>

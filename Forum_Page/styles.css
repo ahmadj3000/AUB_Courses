@@ -1,0 +1,307 @@
+/* General Page Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    margin: 0;
+    padding: 0;
+}
+
+/* Navbar */
+.navbar {
+    text-align: center;
+    padding: 20px;
+    background: #007acc;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Container */
+.container {
+    width: 60%;
+    margin: 20px auto;
+}
+
+/* Ask a Question Section */
+.ask-question {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    text-align: center;
+}
+
+/* Input Group */
+.input-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.ask-question input,
+.ask-question textarea {
+    width: 100%;  /* Adjust width so it stays inside */
+    max-width: 100%;
+    padding: 12px;
+    border: 2px solid #007acc;
+    border-radius: 5px;
+    font-size: 16px;
+    resize: none;
+    box-sizing: border-box; /* Ensures padding doesn't expand it */
+}
+
+.ask-question textarea {
+    height: 80px;
+    resize: none;
+}
+
+/* Post Question Button */
+.btn-primary {
+    background: #007acc;
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    margin-top: 10px;
+}
+
+.btn-primary:hover {
+    background: #005fa3;
+}
+
+/* Questions Section */
+#questions-container {
+    margin-top: 20px;
+}
+
+/* Answer Card Styling */
+.answer-box {
+    background: #ffffff;  /* Clean white background */
+    padding: 15px 20px;
+    border-radius: 12px;  /* Rounded edges for a modern look */
+    margin: 12px 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Softer shadow */
+    border: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 700px; /* Wider answers for better readability */
+    transition: 0.3s ease-in-out;
+}
+
+/* Hover Effect */
+.answer-box:hover {
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+/* Username Styling */
+.answer-box strong {
+    font-size: 20px;
+    font-weight: bold;
+    color: #007acc;
+    margin-bottom: 5px;
+}
+
+/* Answer Text */
+.answer-box p {
+    color: #333;
+    font-size: 16px;
+    margin: 5px 0 10px;
+    word-wrap: break-word;
+    line-height: 1.5;
+}
+
+/* Like & Reply Counter Section */
+.answer-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding-top: 8px;
+    border-top: 1px solid #ddd;
+    margin-top: 10px;
+}
+
+/* Like Button Styling */
+.like-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    background: #ffebe6; /* Light red background */
+    border: 1px solid #e74c3c;
+    color: #e74c3c;
+    padding: 8px 14px;
+    border-radius: 8px;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Like Button Hover Effect */
+.like-btn:hover {
+    background: #e87d71;
+    color: white;
+    transform: scale(1.05);
+}
+
+/* Like Counter */
+.like-counter {
+    font-size: 16px;
+    color: #000000;
+    font-weight: bold;
+    margin-left: 2px;
+    align-content: center;
+}
+
+.category-tag {
+    font-size: 12px;
+    background: #e0f2ff;
+    color: #007acc;
+    padding: 3px 6px;
+    border-radius: 5px;
+    margin-left: 5px;
+    font-weight: bold;
+}
+
+/* Reply Counter */
+.reply-count {
+    font-size: 14px;
+    color: #555;
+    font-weight: bold;
+    background: #f0f8ff; /* Light blue background */
+    padding: 6px 10px;
+    border-radius: 6px;
+}
+
+/* Replies Container */
+.replies-container {
+    margin-top: 15px; /* Push replies further down */
+    width: 95%; /* Adjust width to be almost full */
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px;
+    background: #f9f9fb;
+    border-radius: 8px;
+}
+
+/* Each Individual Reply */
+.reply-box {
+    display: flex;
+    align-items: baseline;
+    background: white;
+    padding: 12px;
+    margin: 5px 0;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-left: 4px solid #007acc;
+    width: 90%; /* Ensures it takes full width of the container */
+}
+
+/* Reply Username */
+.reply-box strong {
+    font-weight: bold;
+    color: #007acc;
+    margin-top: 7px;
+    font-size: 15px;
+    margin-right: 8px;
+    white-space: nowrap; /* Prevents name from wrapping */
+}
+/* Reply Text */
+.reply-box p {
+    color: #333;
+    flex-grow: 1;
+    word-break: break-word;
+    text-align: left;
+}
+/* ✅ Reply Form Styling */
+.reply-form {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f0f8ff;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 10px;
+    width: 95%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+/* ✅ Name Input in Reply Form */
+.reply-form input {
+    width: 150px;  /* Keep the name input box the same size */
+    padding: 10px;
+    border: 1px solid #007acc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* ✅ Reply Text Box (Expands Fully) */
+.reply-form textarea {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #007acc;
+    border-radius: 5px;
+    font-size: 14px;
+    height: 40px;
+    resize: none;
+    margin-left: 10px; /* Adds space between name input and reply box */
+}
+
+/* ✅ Fix Post Reply Button */
+.reply-form button {
+    background: linear-gradient(90deg, #007acc, #005fa3);
+    color: white;
+    padding: 12px 15px;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: 0.3s;
+    cursor: pointer;
+    border: none;
+    min-width: 110px;
+    text-align: center;
+    margin-left: 10px; /* Ensures spacing from reply box */
+}
+
+/* ✅ Hover Effect */
+.reply-form button:hover {
+    transform: scale(1.05);
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+    }
+
+    .input-group {
+        flex-direction: column;
+    }
+}
+
+/* ✅ Reply Button Styling */
+.reply-btn {
+    display: inline-block;
+    background: #e0f2ff; /* Light blue background */
+    color: #007acc;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1px solid #007acc;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+/* ✅ Hover Effect */
+.reply-btn:hover {
+    background: #007acc;
+    color: white;
+    transform: scale(1.05);
+}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AUB Forum</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <h1>📘 AUB Forum</h1>
+    </nav>
+
+    <main class="container">
+        <!-- Ask a Question Section -->
+        <section class="ask-question">
+            <h2>Ask a Question</h2>
+            <form id="question-form">
+                <div class="input-group">
+                    <input type="text" id="username" placeholder="Your Name" required>
+                    <input type="text" id="category" placeholder="Category (e.g., Exams, Homework)" required>
+                </div>
+                <textarea id="question" placeholder="Type your question..." required></textarea>
+                <button type="button" class="btn-primary" onclick="postQuestion()">Post Question</button>
+            </form>
+        </section>
+
+        <!-- Display Questions -->
+        <h2 class="discussion-title">Latest Questions</h2>
+        <section id="questions-container">
+            <!-- Questions will be dynamically inserted here -->
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
